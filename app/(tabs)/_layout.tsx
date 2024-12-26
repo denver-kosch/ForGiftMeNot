@@ -34,7 +34,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <ListIcon color={color} size={24}/>,
         }}
       />
-      
+
     </Tabs>
   );
 }
