@@ -4,26 +4,21 @@ import { connectDB } from './models.js';
 import cors from 'cors';
 import { asyncHandler } from './functions.js';
 import { register, login, auth } from './api/authentication.js';
-import { SERVER_HOST } from './config.js';
+import { SERVER_HOST, SERVER_PORT } from './config.js';
 
 
 
 const app = express();
 app.use(express.json(), cors());
 const server = createServer(app);
-let dbConn;
 
 (async () => {
     try {
-      const [, port, sequelize] = await connectDB();
-      dbConn = sequelize;
-      server.listen(port, SERVER_HOST, () => {
-        console.log(`Server running on http://${SERVER_HOST}:${port}`);
-
-      });
+      await connectDB();
+      server.listen(SERVER_PORT, SERVER_HOST, () => {console.log(`Server running on http://${SERVER_HOST}:${SERVER_PORT}`);});
     } catch (error) {
-      console.log('Error connecting to database: ' + error.message);
-    };
+      console.log(error.message);
+    }
 })();
 
 app.post('/register', asyncHandler(register));

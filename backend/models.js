@@ -8,9 +8,8 @@ export const connectDB = async () => {
         await sequelize.authenticate();
         console.log('Connection has been established successfully.');
         await syncDB();
-        return [DB_HOST, DB_PORT, sequelize];
     } catch (error) {
-        console.error('Unable to connect to the database:', error);
+        throw new Error('Unable to connect to the database: ' + error.message);
     }
 };
 
