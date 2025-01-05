@@ -6,7 +6,6 @@ import { HomeIcon, ListIcon } from '@/hooks/icons';
 
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
 
   return (
     <Tabs

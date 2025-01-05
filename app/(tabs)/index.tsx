@@ -1,10 +1,11 @@
-import { ScrollView, StyleSheet, Text, View, } from "react-native";
+import { ColorSchemeName, ScrollView, StyleSheet, Text, View, } from "react-native";
 import React from "react";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
-  const styles = createStyles();
+  const colorScheme = useColorScheme();
+  const styles = createStyles(colorScheme);
 
 
   const IndexContents = () => {
@@ -34,8 +35,7 @@ export default function Index() {
   );
 }
 
-const createStyles = () => {
-  const colorScheme = useColorScheme();
+const createStyles = (colorScheme:ColorSchemeName) => {
 
   return StyleSheet.create({
     container: {
