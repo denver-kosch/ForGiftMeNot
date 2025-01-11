@@ -1,13 +1,13 @@
 import ENDPOINT from "./serverEndpoint";
+import { Headers } from "@/types";
 
-async function apiCall (api, body = {}, headers = {'Content-Type': 'application/json'}) {
+async function apiCall (api: string, body = {}, headers: Headers = {"Content-Type": "application/json"}) {
     const apiLink = `${ENDPOINT}${api}`;
-    console.log("apiLink: ", apiLink);
     const isFormData = body instanceof FormData;
     try {
         const fetchOptions = {
             method: "POST",
-            headers: isFormData ? headers : { 'Content-Type': 'application/json', ...headers },
+            headers: isFormData ? headers : { ...headers, 'Content-Type': headers['Content-Type'] || 'application/json' },
             body: isFormData ? body : JSON.stringify(body)
         };
         const result = await fetch(apiLink, fetchOptions);

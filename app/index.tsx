@@ -1,12 +1,12 @@
 import { ScrollView, Text, View, } from "react-native";
 import { useEffect } from "react";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { homeStyles } from "@/styles"
+import { useHomeStyles } from "@/styles"
 import { store } from "@/store";
 
 export default function Index() {
   const token = store.getState().auth.token;
-  const styles = homeStyles();
+  const styles = useHomeStyles();
 
 
   useEffect(() => {

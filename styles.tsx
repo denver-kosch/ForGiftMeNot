@@ -1,7 +1,7 @@
-import {StyleSheet} from 'react-native';
+import {ColorSchemeName, StyleSheet} from 'react-native';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
-const createHomeStyles = (colorScheme) => StyleSheet.create({
+const createHomeStyles = (colorScheme: ColorSchemeName) => StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: "center",
@@ -31,7 +31,7 @@ const createHomeStyles = (colorScheme) => StyleSheet.create({
     },
 });
 
-const createLoginStyles = (colorScheme) => StyleSheet.create({
+const createLoginStyles = (colorScheme: ColorSchemeName) => StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: "center",
@@ -63,7 +63,7 @@ const createLoginStyles = (colorScheme) => StyleSheet.create({
     }
 });
 
-const createProfileStyles = (colorScheme) => StyleSheet.create({
+const createProfileStyles = (colorScheme: ColorSchemeName) => StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: "center",
@@ -95,7 +95,7 @@ const createProfileStyles = (colorScheme) => StyleSheet.create({
     },
 });
 
-const creatListStyles = (colorScheme) => StyleSheet.create({
+const creatListStyles = (colorScheme: ColorSchemeName) => StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: "center",
@@ -127,22 +127,22 @@ const creatListStyles = (colorScheme) => StyleSheet.create({
     },
 });
 
-export const homeStyles = () => {
+export const useHomeStyles = () => {
     const colorScheme = useColorScheme();
     return createHomeStyles(colorScheme);
 };
 
-export const loginStyles = () => {
+export const useLoginStyles = () => {
     const colorScheme = useColorScheme();
     return createLoginStyles(colorScheme);
 };
 
-export const profileStyles = () => {
+export const useProfileStyles = () => {
     const colorScheme = useColorScheme();
     return createProfileStyles(colorScheme);
 };
 
-export const listStyles = () => {
+export const useListStyles = () => {
     const colorScheme = useColorScheme();
     return creatListStyles(colorScheme);
 }

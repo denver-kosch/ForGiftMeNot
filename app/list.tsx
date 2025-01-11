@@ -1,8 +1,8 @@
-import { listStyles } from '@/styles';
+import { useListStyles } from '@/styles';
 import { View } from 'react-native';
 
 const List = () => {
-    const styles = listStyles();
+    const styles = useListStyles();
 
     return (
         <View style={styles.container}>

@@ -14,7 +14,10 @@ export const connectDB = async () => {
 };
 
 export const syncDB = async () => {
-    await sequelize.sync({alter: true});
+    await sequelize.sync({
+        alter: false,
+        force: false,
+    });
     console.log('Database synchronized.');
 }
 
@@ -62,6 +65,11 @@ export const User = sequelize.define("User", {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false
+    },
+    admin: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
     },
     }, {
         timestamps: true,

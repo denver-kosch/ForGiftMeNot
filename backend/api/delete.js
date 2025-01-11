@@ -46,3 +46,20 @@ export const deleteGift = async (req) => {
         throw new ApiError(500, error.message);
     }
 };
+
+export const deleteUser = async (req) => {
+    const id = extractToken(req);
+
+    try {
+        if (!id) throw new ApiError(401, "Unauthorized");
+
+        const user = await User.findByPk(id);
+        if (!user) throw new ApiError(404, "User not found with provided id");
+
+        await user.destroy();
+
+        return {status: 200, message: "User deleted successfully"};
+    } catch (error) {
+        throw new ApiError(500, error.message);
+    }
+};

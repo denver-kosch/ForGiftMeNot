@@ -1,23 +1,22 @@
-import React, { useState, useEffect, useRef } from 'react';
-import apiCall from '@/services/apiCall.js';
+import React, { useState, useEffect } from 'react';
+import apiCall from '@/services/apiCall';
 import { View, Text, TextInput, Button, KeyboardAvoidingView, Platform } from 'react-native';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { RootStackParamList, AuthState } from '@/types';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginStyles } from '@/styles';
+import { useLoginStyles } from '@/styles';
 
 const LoginPage = () => {
     const dispatch = useDispatch();
     const token = useSelector((state: AuthState) => state.auth.token);
-    const styles = loginStyles();
+    const styles = useLoginStyles();
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
     const [isLogin, setIsLogin] = useState(true);
     const [error, setError] = useState('');
-    const inputRef = useRef<TextInput>(null);
 
     useEffect(() => {
         if (token) navigation.navigate('Home');
-    }, [token]);
+    }, [token, navigation]);
 
 
     const LoginContents = () => {
@@ -31,7 +30,6 @@ const LoginPage = () => {
             const response = await apiCall('login', { email, password });
 
             if (response?.success) {
-                console.log('Success:', response.token);
                 setEmail('');
                 setPassword('');
                 dispatch({ type: 'SET_TOKEN', payload: response.token });
@@ -47,7 +45,6 @@ const LoginPage = () => {
                     <Text style={styles.text}>Email:</Text>
                     <TextInput
                         style={styles.input}
-                        ref={inputRef}
                         keyboardType="email-address"
                         value={email}
                         onChangeText={text => setEmail(text)}
@@ -80,7 +77,6 @@ const LoginPage = () => {
             const response = await apiCall('register', { email, username, password });
 
             if (response?.success) {
-                console.log('Success:', response.token);
                 setEmail('');
                 setUsername('');
                 setPassword('');
