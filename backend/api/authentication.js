@@ -6,11 +6,17 @@ import { hash, compare } from 'bcrypt';
 
 
 export const register = async (req) => {
-    const { username, email, password } = req.body;
-    if (!username || !password) throw new ApiError(400, 'Username and password required');
-    password = await hash(password, 10);
-    const user = await User.create({ username, email, password });
-    return { status: 201, content: { id: user.id, username: user.username, email: user.email } };
+    try {
+        let { username, email, password } = req.body;
+        if (!username || !password || !email) throw new ApiError(400, 'Username, email, and password required');
+        password = await hash(password, 10);
+        const user = await User.create({ username, email, password });
+        const token = jwt.sign({ id: user.id }, SECRET);
+        return { status: 201, content: {token} };
+    } catch (error) {
+        console.error(error);
+        throw new ApiError(400, error.message);
+    }
 };
 
 export const login = async (req) => {
@@ -43,7 +49,7 @@ export const makeToken = async (email, username) => {
     }
 };
 
-export const extractToken = async (req) => {
+export const extractToken = req => {
     try {
         const token = req.headers.authorization.split(" ")[1];
         const content = jwt.verify(token, SECRET);

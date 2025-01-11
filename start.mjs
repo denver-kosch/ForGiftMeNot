@@ -24,13 +24,13 @@ const getLocalIP = () => {
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = path.dirname(__filename);
   const envPath = path.join(__dirname, '.env');
-  const newApiUrl = `REACT_APP_API_URL=http://${ip}`;
+  const newApiUrl = `EXPO_PUBLIC_API_URL=${ip}`;
 
   // Read the current content of the .env file
   let envContent = fs.readFileSync(envPath, 'utf8');
 
-  // Check if the REACT_APP_API_URL variable already exists
-  const regex = /^REACT_APP_API_URL=.*$/gm;
+  // Check if the EXPO_PUBLIC_API_URL variable already exists
+  const regex = /^EXPO_PUBLIC_API_URL=.*$/gm;
     // Replace the existing line
     envContent = regex.test(envContent) ? envContent.replace(regex, newApiUrl) : envContent + `\n${newApiUrl}\n`;
   

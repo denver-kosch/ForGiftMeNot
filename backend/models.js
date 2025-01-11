@@ -13,6 +13,11 @@ export const connectDB = async () => {
     }
 };
 
+export const syncDB = async () => {
+    await sequelize.sync({alter: true});
+    console.log('Database synchronized.');
+}
+
 export const closeDB = async () => {
     await sequelize.close();
     console.log('Connection has been closed.');
@@ -33,6 +38,14 @@ export const User = sequelize.define("User", {
         type: DataTypes.STRING,
         allowNull: false
     },
+    firstName: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    lastname: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
     email: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -40,6 +53,15 @@ export const User = sequelize.define("User", {
         validate: {
             isEmail: true
         }
+    },
+    phoneNum: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    verified: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
     },
     }, {
         timestamps: true,
@@ -92,24 +114,24 @@ export const Wishlist = sequelize.define('List', {
         type: DataTypes.STRING,
         allowNull: false
     },
+    description: {
+        type: DataTypes.TEXT,
+        allowNull: true
+    }
     }, {
         timestamps: true,
     }
 );
 
 export const ListGift = sequelize.define('ListGift', {
-    id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true
-    },
     list: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
             model: Wishlist,
             key: 'id'
-        }
+        },
+        primaryKey: true
     },
     gift: {
         type: DataTypes.INTEGER,
@@ -117,7 +139,8 @@ export const ListGift = sequelize.define('ListGift', {
         references: {
             model: Gift,
             key: 'id'
-        }
+        },
+        primaryKey: true
     },
     purchased: {
         type: DataTypes.BOOLEAN,
@@ -129,14 +152,47 @@ export const ListGift = sequelize.define('ListGift', {
     }
 );
 
-User.hasMany(Wishlist, { foreignKey: 'owner' });
-Wishlist.belongsTo(User, { foreignKey: 'owner' });
-Wishlist.hasMany(ListGift, { foreignKey: 'list' });
-ListGift.belongsTo(Wishlist, { foreignKey: 'list' });
+export const UserList = sequelize.define('UserList', {
+    user: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: User,
+            key: 'id'
+        },
+        primaryKey: true
+    },
+    list: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: Wishlist,
+            key: 'id'
+        },
+        primaryKey: true
+    },
+    }, {
+        timestamps: true,
+    }
+);
+
+// User and Wishlist (through UserList)
+User.belongsToMany(Wishlist, { through: UserList });
+Wishlist.belongsToMany(User, { through: UserList });
+
+UserList.belongsTo(User, { foreignKey: 'user', onDelete: 'CASCADE' });
+UserList.belongsTo(Wishlist, { foreignKey: 'list', onDelete: 'CASCADE' });
+
+// Wishlist and Gift (through ListGift)
 Wishlist.belongsToMany(Gift, { through: ListGift });
 Gift.belongsToMany(Wishlist, { through: ListGift });
 
-export const syncDB = async () => {
-    await sequelize.sync();
-    console.log('Database synchronized.');
-}
+ListGift.belongsTo(Wishlist, { foreignKey: 'list', onDelete: 'CASCADE' });
+ListGift.belongsTo(Gift, { foreignKey: 'gift', onDelete: 'CASCADE' });
+
+Wishlist.hasMany(ListGift, { foreignKey: 'list', onDelete: 'CASCADE' });
+Gift.hasMany(ListGift, { foreignKey: 'gift', onDelete: 'CASCADE' });
+
+// Wishlist and User direct relationship
+Wishlist.belongsTo(User, { foreignKey: 'owner', onDelete: 'CASCADE' });
+User.hasMany(Wishlist, { foreignKey: 'owner', onDelete: 'CASCADE' });

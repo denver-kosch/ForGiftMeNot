@@ -27,3 +27,5 @@ export const ForwardIcon: React.FC<IconProps> = ({ color, size }) => <Entypo nam
 export const CloseIcon: React.FC<IconProps> = ({ color, size }) => <Entypo name="cross" color={color} size={size} />;
 
 export const AddIcon: React.FC<IconProps> = ({ color, size }) => <Entypo name="plus" color={color} size={size} />;
+
+export const ProfileIcon: React.FC<IconProps> = ({ color, size }) => <Entypo name="user" color={color} size={size} />;
