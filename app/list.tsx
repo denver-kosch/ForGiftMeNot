@@ -1,14 +1,22 @@
 import { useListStyles } from '@/styles';
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback } from 'react';
 import { View } from 'react-native';
 
 const List = () => {
-    const styles = useListStyles();
+	const styles = useListStyles();
 
-    return (
-        <View style={styles.container}>
+	useFocusEffect(
+		useCallback(() => {
+			// Fetch list data
+		}, [])
+	)
 
-        </View>
-    )
+	return (
+		<View style={styles.container}>
+
+		</View>
+	)
 };
 
 export default List;

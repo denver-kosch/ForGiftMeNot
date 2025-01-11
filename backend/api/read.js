@@ -3,14 +3,18 @@ import { extractToken } from "./authentication.js";
 
 export const getLists = async (req) => {
     const id = extractToken(req);
+    const {owned, shared} = req.body;
 
     try {
         if (!id) throw new ApiError(401, "Unauthorized");
+        if (!owned && !shared) throw new ApiError(400, "No lists to fetch");
 
         const user = await User.findByPk(id);
         if (!user) throw new ApiError(404, "User not found");
+        const lists = {};
 
-        const lists = await Wishlist.findAll({ where: { owner: id } });
+        if (owned) lists.owned = await Wishlist.findAll({ where: { owner: id } });
+        if (shared) lists.shared = await Wishlist.findAll({ include: { model: User, where: { id } } });
 
         return { status: 200, lists };
     } catch (error) {
@@ -33,7 +37,7 @@ export const getList = async (req) => {
         if (!list) throw new ApiError(404, "List not found with provided id");
         if (list.owner !== id) throw new ApiError(403, "Forbidden: You do not own this list");
 
-        const gifts = await list.getGifts();
+        const gifts = await Gift.findAll({ include: { model: Wishlist, where: { id: listId } } });
 
         return { status: 200, list, gifts };
     } catch (error) {
@@ -43,14 +47,20 @@ export const getList = async (req) => {
 
 export const getUser = async (req) => {
     const id = extractToken(req);
+    const { include = [], exclude = [] } = req.body;
+
     try {
         if (!id) throw new ApiError(401, "Unauthorized");
-        const user = await User.findByPk(id, { attributes: { exclude: ['password'] } });
-        if (!user) throw new ApiError(404, "User not found");
 
-        const {password, ...userData} = user.toJSON();
+        //Validate include/exclude arrays
+        if (!Array.isArray(include) || !Array.isArray(exclude)) throw new ApiError(400, "Include and exclude must be arrays");
+        if (include.length && exclude.length) throw new ApiError(400, "Include and exclude cannot be used together");
 
-        return { status: 200, content: {user: userData} };
+        const userData = await User.findByPk(id, { attributes: include.length ? include : { exclude } });
+        if (!userData) throw new ApiError(404, "User not found");
+
+
+        return { status: 200, content: {userData: userData.dataValues}};
     } catch (error) {
         throw new ApiError(500, error.message);
     }

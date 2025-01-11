@@ -45,7 +45,7 @@ export const User = sequelize.define("User", {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    lastname: {
+    lastName: {
         type: DataTypes.STRING,
         allowNull: true
     },

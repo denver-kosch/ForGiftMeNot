@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import apiCall from '@/services/apiCall';
 import { View, Text, TextInput, Button, KeyboardAvoidingView, Platform } from 'react-native';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { useNavigation, NavigationProp, useFocusEffect } from '@react-navigation/native';
 import { RootStackParamList, AuthState } from '@/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLoginStyles } from '@/styles';
@@ -14,9 +14,7 @@ const LoginPage = () => {
     const [isLogin, setIsLogin] = useState(true);
     const [error, setError] = useState('');
 
-    useEffect(() => {
-        if (token) navigation.navigate('Home');
-    }, [token, navigation]);
+    useFocusEffect(useCallback(() => {if (token) navigation.navigate('Home');}, [token, navigation]));
 
 
     const LoginContents = () => {

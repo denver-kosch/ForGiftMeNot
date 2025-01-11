@@ -1,5 +1,6 @@
 import { ScrollView, Text, View, } from "react-native";
-import { useEffect } from "react";
+import { useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { useHomeStyles } from "@/styles"
 import { store } from "@/store";
@@ -9,9 +10,11 @@ export default function Index() {
   const styles = useHomeStyles();
 
 
-  useEffect(() => {
+  useFocusEffect(
+    useCallback(() => {
     
-  }, [token]);
+    }, [token])
+  );
 
 
   const IndexContents = () => {
