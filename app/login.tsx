@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import apiCall from '@/services/apiCall.js';
-import { View, Text, TextInput, Button, } from 'react-native';
+import { View, Text, TextInput, Button, KeyboardAvoidingView, Platform } from 'react-native';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { RootStackParamList, AuthState } from '@/types';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,9 +12,6 @@ const LoginPage = () => {
     const styles = loginStyles();
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
     const [isLogin, setIsLogin] = useState(true);
-    const [email, setEmail] = useState('');
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const inputRef = useRef<TextInput>(null);
 
@@ -24,6 +21,8 @@ const LoginPage = () => {
 
 
     const LoginContents = () => {
+        const [email, setEmail] = useState('');
+        const [password, setPassword] = useState('');
 
         const handleSubmit = async (event: { preventDefault: () => void; }) => {
             event.preventDefault();
@@ -53,8 +52,6 @@ const LoginPage = () => {
                         value={email}
                         onChangeText={text => setEmail(text)}
                         autoCapitalize="none"
-                        onFocus={() => console.log('Input focused')}
-                        onBlur={() => console.log('Input blurred')}
                     />
                 </View>
                 <View>
@@ -72,6 +69,9 @@ const LoginPage = () => {
     };
 
     const RegisterContents = () => {
+        const [email, setEmail] = useState('');
+        const [username, setUsername] = useState('');
+        const [password, setPassword] = useState('');
 
         const handleSubmit = async (event: { preventDefault: () => void; }) => {
             event.preventDefault();
@@ -129,12 +129,14 @@ const LoginPage = () => {
     };
 
     return (
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1 }}>
         <View style={styles.container}>
             <Text style={styles.header}>{isLogin ? 'Login' : 'Register'}</Text>
             {isLogin ? <LoginContents /> : <RegisterContents />}
             {error && <Text style={{ color: 'red', marginBottom: 20 }}>{error}</Text>}
             <Button title={isLogin ? 'Switch to Register' : 'Switch to Login'} onPress={() => setIsLogin(!isLogin)} />
         </View>
+            </KeyboardAvoidingView>
     );
 };
 
