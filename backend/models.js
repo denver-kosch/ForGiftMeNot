@@ -66,6 +66,13 @@ export const User = sequelize.define("User", {
         allowNull: false,
         defaultValue: false
     },
+    profilePic: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        validate: {
+            isUrl: true
+        }
+    },
     admin: {
         type: DataTypes.BOOLEAN,
         allowNull: false,

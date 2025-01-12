@@ -1,9 +1,13 @@
+
 export type RootStackParamList = {
     Home: undefined;
     List: undefined;
     Profile: undefined;
     Login: undefined;
-};
+    ListDetail: { id: string };
+    CreateList: undefined;
+  };
+  
 
 export type AuthState = {
     auth: {
@@ -19,4 +23,12 @@ export type Headers = {
     "Access-Control-Allow-Credentials"?: string;
     "Access-Control-Allow-Methods"?: string;
     "Access-Control-Allow-Headers"?: string;
+};
+
+export type ListType = {
+    id: string;
+    owner: string;
+    name: string;
+    description: string;
+    lastUpdated?: string;
 };

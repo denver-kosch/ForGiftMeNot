@@ -12,10 +12,9 @@ export const createList = async (req) => {
 
         const user = await User.findByPk(id);
         if (!user) throw new ApiError(404, "User not found");
-        
-        await Wishlist.create({ name, description, owner: id });
+        const list = await Wishlist.create({ name, description, owner: id });
 
-        return {status: 201};
+        return {status: 201, content: {listId: list.id}};
     } catch (error) {
         throw new ApiError(500, error.message);
     }

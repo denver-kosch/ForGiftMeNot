@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import apiCall from '@/services/apiCall';
-import { View, Text, TextInput, Button, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, TextInput, Button, } from 'react-native';
 import { useNavigation, NavigationProp, useFocusEffect } from '@react-navigation/native';
 import { RootStackParamList, AuthState } from '@/types';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,6 +15,11 @@ const LoginPage = () => {
     const [error, setError] = useState('');
 
     useFocusEffect(useCallback(() => {if (token) navigation.navigate('Home');}, [token, navigation]));
+
+    const switchPage = () => {
+        setIsLogin(!isLogin);
+        setError('');
+    };
 
 
     const LoginContents = () => {
@@ -73,7 +78,6 @@ const LoginPage = () => {
             setError('');
 
             const response = await apiCall('register', { email, username, password });
-
             if (response?.success) {
                 setEmail('');
                 setUsername('');
@@ -81,9 +85,8 @@ const LoginPage = () => {
                 setIsLogin(true);
                 dispatch({ type: 'SET_TOKEN', payload: response.token });
                 navigation.navigate('Home');
-            } else {
-                setError(response?.error || 'An error occurred');
-            }
+            } else setError(response?.error || 'An error occurred');
+            
         };
 
         return (
@@ -123,14 +126,12 @@ const LoginPage = () => {
     };
 
     return (
-        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1 }}>
         <View style={styles.container}>
             <Text style={styles.header}>{isLogin ? 'Login' : 'Register'}</Text>
             {isLogin ? <LoginContents /> : <RegisterContents />}
             {error && <Text style={{ color: 'red', marginBottom: 20 }}>{error}</Text>}
-            <Button title={isLogin ? 'Switch to Register' : 'Switch to Login'} onPress={() => setIsLogin(!isLogin)} />
+            <Button title={isLogin ? 'Switch to Register' : 'Switch to Login'} onPress={switchPage} />
         </View>
-            </KeyboardAvoidingView>
     );
 };
 

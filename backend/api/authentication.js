@@ -14,7 +14,6 @@ export const register = async (req) => {
         const token = jwt.sign({ id: user.id }, SECRET);
         return { status: 201, content: {token} };
     } catch (error) {
-        console.error(error);
         throw new ApiError(400, error.message);
     }
 };

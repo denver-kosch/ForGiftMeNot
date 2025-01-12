@@ -1,11 +1,12 @@
-import { User, Wishlist, Gift } from "../models.js";
+import { User, Wishlist, Gift, UserList } from "../models.js";
 import { extractToken } from "./authentication.js";
+import { ApiError } from "../functions.js";
 
 export const getLists = async (req) => {
-    const id = extractToken(req);
-    const {owned, shared} = req.body;
-
     try {
+        const id = extractToken(req);
+        const {owned , shared } = req.body;
+
         if (!id) throw new ApiError(401, "Unauthorized");
         if (!owned && !shared) throw new ApiError(400, "No lists to fetch");
 
@@ -13,11 +14,12 @@ export const getLists = async (req) => {
         if (!user) throw new ApiError(404, "User not found");
         const lists = {};
 
-        if (owned) lists.owned = await Wishlist.findAll({ where: { owner: id } });
-        if (shared) lists.shared = await Wishlist.findAll({ include: { model: User, where: { id } } });
+        if (owned) lists.owned = await Wishlist.findAll({ where: { owner: id }, attributes: { exclude: ['owner'] } });
+        if (shared) lists.shared = await UserList.findAll({ where: { userId: id }, include: { model: Wishlist, attributes: { exclude: ['owner'] } } });
 
-        return { status: 200, lists };
+        return { status: 200, content: {lists} };
     } catch (error) {
+        console.log(error);
         throw new ApiError(500, error.message);
     }
 };

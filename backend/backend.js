@@ -11,18 +11,18 @@ import { updateList, updateGift, updateUser } from './api/update.js';
 import { deleteList, deleteGift, deleteUser } from './api/delete.js';
 
 
-
 const app = express();
-app.use(express.json(), cors());
+
+app.use(express.json(), cors(), express.urlencoded({ extended: true }), express.static('public'));
 const server = createServer(app);
 
 (async () => {
-    try {
-      await connectDB();
-      server.listen(SERVER_PORT, SERVER_HOST, () => {console.log(`Server running on http://${SERVER_HOST}:${SERVER_PORT}`);});
-    } catch (error) {
-      console.log(error.message);
-    }
+		try {
+			await connectDB();
+			server.listen(SERVER_PORT, SERVER_HOST, () => {console.log(`Server running on http://${SERVER_HOST}:${SERVER_PORT}`);});
+		} catch (error) {
+			console.log(error.message);
+		}
 })();
 
 // Authentication routes

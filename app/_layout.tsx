@@ -14,6 +14,8 @@ import LoginPage from './login';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { HomeIcon, ListIcon, ProfileIcon } from '@/hooks/icons';
 import { useEffect, useState } from 'react';
+import CreateList from './createList';
+import ListDetail from './listDetail';
 
 
 const Stack = createNativeStackNavigator();
@@ -79,6 +81,9 @@ export default function RootLayout() {
     	  <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
 					<Stack.Navigator>
 						<Stack.Screen name="Main" options={{ headerShown: false }} component={TabNavigator}/>
+                        <Stack.Screen name="List" component={List} options={{ headerShown: false }}/>
+                        <Stack.Screen name="CreateList" component={CreateList} options={{ headerShown: false }}/>
+                        <Stack.Screen name="ListDetail" component={ListDetail} options={{ headerShown: false }}/>
 						<Stack.Screen name="+not-found" component={NotFoundScreen}/>
 					</Stack.Navigator>
           <StatusBar style="auto" />
