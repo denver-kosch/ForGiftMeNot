@@ -1,5 +1,5 @@
 import { hash } from "bcrypt";
-import { User, Wishlist, Gift } from "../models.js";
+import { User, List, Gift } from "../models.js";
 import { extractToken } from "./authentication.js";
 import { ApiError } from "../functions.js";
 
@@ -38,7 +38,7 @@ export const updateList = async (req) => {
         const user = await User.findByPk(id);
         if (!user) throw new ApiError(404, "User not found");
 
-        const list = await Wishlist.findByPk(listId);
+        const list = await List.findByPk(listId);
         if (!list) throw new ApiError(404, "List not found");
         if (list.owner !== id) throw new ApiError(403, "Forbidden");
 

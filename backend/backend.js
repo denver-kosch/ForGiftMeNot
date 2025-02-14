@@ -19,7 +19,7 @@ const server = createServer(app);
 (async () => {
 		try {
 			await connectDB();
-			server.listen(SERVER_PORT, SERVER_HOST, () => {console.log(`Server running on http://${SERVER_HOST}:${SERVER_PORT}`);});
+			server.listen(SERVER_PORT, SERVER_HOST, () => {console.log(`Server running on http://${SERVER_HOST}:${SERVER_PORT}`)});
 		} catch (error) {
 			console.log(error.message);
 		}
@@ -32,7 +32,7 @@ app.post('/login', asyncHandler(login));
 
 app.post('/auth', asyncHandler(auth));
 
-//Create routes
+// Create routes
 app.post('/createList', asyncHandler(createList));
 
 app.post('/addToList', asyncHandler(addToList));

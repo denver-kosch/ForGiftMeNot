@@ -21,6 +21,7 @@ export const syncDB = async () => {
     console.log('Database synchronized.');
 }
 
+
 export const closeDB = async () => {
     await sequelize.close();
     console.log('Connection has been closed.');
@@ -111,7 +112,7 @@ export const Gift = sequelize.define("Gift", {
     }
 );
 
-export const Wishlist = sequelize.define('List', {
+export const List = sequelize.define('List', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -138,76 +139,24 @@ export const Wishlist = sequelize.define('List', {
     }
 );
 
-export const ListGift = sequelize.define('ListGift', {
-    list: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-            model: Wishlist,
-            key: 'id'
-        },
-        primaryKey: true
-    },
-    gift: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-            model: Gift,
-            key: 'id'
-        },
-        primaryKey: true
-    },
-    purchased: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false
-    },
-    }, {
-        timestamps: true,
-    }
-);
+export const ListGift = sequelize.define('ListGift', {}, {timestamps: true});
 
-export const UserList = sequelize.define('UserList', {
-    user: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-            model: User,
-            key: 'id'
-        },
-        primaryKey: true
-    },
-    list: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-            model: Wishlist,
-            key: 'id'
-        },
-        primaryKey: true
-    },
-    }, {
-        timestamps: true,
-    }
-);
+export const UserList = sequelize.define('UserList', {}, {timestamps: true,});
 
 // User and Wishlist (through UserList)
-User.belongsToMany(Wishlist, { through: UserList });
-Wishlist.belongsToMany(User, { through: UserList });
+User.belongsToMany(List, { through: UserList, foreignKey: 'user' });
+List.belongsToMany(User, { through: UserList, foreignKey: 'list' });
 
-UserList.belongsTo(User, { foreignKey: 'user', onDelete: 'CASCADE' });
-UserList.belongsTo(Wishlist, { foreignKey: 'list', onDelete: 'CASCADE' });
+UserList.belongsTo(User, { foreignKey: 'user' });
+UserList.belongsTo(List, { foreignKey: 'list' });
 
 // Wishlist and Gift (through ListGift)
-Wishlist.belongsToMany(Gift, { through: ListGift });
-Gift.belongsToMany(Wishlist, { through: ListGift });
+List.belongsToMany(Gift, { through: ListGift, foreignKey: 'list' });
+Gift.belongsToMany(List, { through: ListGift, foreignKey: 'gift' });
 
-ListGift.belongsTo(Wishlist, { foreignKey: 'list', onDelete: 'CASCADE' });
-ListGift.belongsTo(Gift, { foreignKey: 'gift', onDelete: 'CASCADE' });
-
-Wishlist.hasMany(ListGift, { foreignKey: 'list', onDelete: 'CASCADE' });
-Gift.hasMany(ListGift, { foreignKey: 'gift', onDelete: 'CASCADE' });
+ListGift.belongsTo(List, { foreignKey: 'list' });
+ListGift.belongsTo(Gift, { foreignKey: 'gift' });
 
 // Wishlist and User direct relationship
-Wishlist.belongsTo(User, { foreignKey: 'owner', onDelete: 'CASCADE' });
-User.hasMany(Wishlist, { foreignKey: 'owner', onDelete: 'CASCADE' });
+List.belongsTo(User, { foreignKey: 'owner', onDelete: 'CASCADE' });
+User.hasMany(List, { foreignKey: 'owner', onDelete: 'CASCADE' });

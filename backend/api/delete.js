@@ -1,6 +1,6 @@
 import { extractToken } from "./authentication.js";
 import { ApiError } from "../functions.js";
-import { User, Wishlist, Gift } from "../models.js";
+import { User, List, Gift } from "../models.js";
 
 export const deleteList = async (req) => {
     const { listId } = req.body;
@@ -13,7 +13,7 @@ export const deleteList = async (req) => {
         const user = await User.findByPk(id);
         if (!user) throw new ApiError(404, "User not found with provided id");
 
-        const list = await Wishlist.findByPk(listId);
+        const list = await List.findByPk(listId);
         if (!list) throw new ApiError(404, "List not found with provided id");
         if (list.owner !== id) throw new ApiError(403, "Forbidden: You do not own this list");
 

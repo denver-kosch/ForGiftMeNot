@@ -22,6 +22,7 @@ export const login = async (req) => {
     const { email, password } = req.body;
     if (!email || !password) throw new ApiError(400, 'Email and password required');
     const user = await User.findOne({ where: { email } });
+    
     if (user && await compare(password, user.password)) {
         const token = jwt.sign({ id: user.id }, SECRET);
         return {status:200, content: {token}, token};

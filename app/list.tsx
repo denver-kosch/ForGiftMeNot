@@ -11,8 +11,10 @@ import PageBreak from '@/components/pagebreak';
 
 const List = () => {
 	const styles = useListStyles();
+
 	const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 	const token = useSelector((state: AuthState) => state.auth.token);
+	console.log(token);
 	const [lists, setLists] = useState<{ owned: ListType[], shared: ListType[] }>({ owned: [], shared: [] });
 
 	useFocusEffect(
@@ -29,7 +31,7 @@ const List = () => {
 		const { id, name, description, owner } = list;
 		return (
 			<TouchableOpacity onPress={() => navigation.navigate('ListDetail', { id })} style={styles.listPreview} key={id}>
-				<View >
+				<View>
 					<Text style={styles.listName}>{name}</Text>
 					<Text style={styles.listDescription}>{description}</Text>
 					{owner && <Text style={styles.listOwner}>Owner: {owner}</Text>}

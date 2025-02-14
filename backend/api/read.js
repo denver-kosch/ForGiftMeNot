@@ -1,22 +1,22 @@
-import { User, Wishlist, Gift, UserList } from "../models.js";
+import { User, List, Gift, UserList } from "../models.js";
 import { extractToken } from "./authentication.js";
 import { ApiError } from "../functions.js";
 
 export const getLists = async (req) => {
     try {
         const id = extractToken(req);
-        const {owned , shared } = req.body;
-
+        const { owned , shared } = req.body;
+        console.log(id)
         if (!id) throw new ApiError(401, "Unauthorized");
         if (!owned && !shared) throw new ApiError(400, "No lists to fetch");
-
+        
         const user = await User.findByPk(id);
         if (!user) throw new ApiError(404, "User not found");
         const lists = {};
-
-        if (owned) lists.owned = await Wishlist.findAll({ where: { owner: id }, attributes: { exclude: ['owner'] } });
-        if (shared) lists.shared = await UserList.findAll({ where: { userId: id }, include: { model: Wishlist, attributes: { exclude: ['owner'] } } });
-
+        console.log(id);
+        if (owned) lists.owned = await List.findAll({ where: { owner: id }, include: { model: User }, logging: console.log });
+        if (shared) lists.shared = await UserList.findAll({ where: { userId: id }, include: { model: List } });
+        
         return { status: 200, content: {lists} };
     } catch (error) {
         console.log(error);
@@ -35,11 +35,11 @@ export const getList = async (req) => {
         const user = await User.findByPk(id);
         if (!user) throw new ApiError(404, "User not found with provided id");
 
-        const list = await Wishlist.findByPk(listId);
+        const list = await List.findByPk(listId);
         if (!list) throw new ApiError(404, "List not found with provided id");
         if (list.owner !== id) throw new ApiError(403, "Forbidden: You do not own this list");
 
-        const gifts = await Gift.findAll({ include: { model: Wishlist, where: { id: listId } } });
+        const gifts = await Gift.findAll({ include: { model: List, where: { id: listId } } });
 
         return { status: 200, list, gifts };
     } catch (error) {
