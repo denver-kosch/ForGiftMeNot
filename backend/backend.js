@@ -13,6 +13,7 @@ import { deleteList, deleteGift, deleteUser } from './api/delete.js';
 
 const app = express();
 
+
 app.use(express.json(), cors(), express.urlencoded({ extended: true }), express.static('public'));
 const server = createServer(app);
 

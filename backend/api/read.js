@@ -13,9 +13,8 @@ export const getLists = async (req) => {
         const user = await User.findByPk(id);
         if (!user) throw new ApiError(404, "User not found");
         const lists = {};
-        console.log(id);
         if (owned) lists.owned = await List.findAll({ where: { owner: id }, include: { model: User }, logging: console.log });
-        if (shared) lists.shared = await UserList.findAll({ where: { userId: id }, include: { model: List } });
+        if (shared) lists.shared = await UserList.findAll({ where: { user: id }, include: { model: List } });
         
         return { status: 200, content: {lists} };
     } catch (error) {

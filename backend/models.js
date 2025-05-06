@@ -99,7 +99,7 @@ export const Gift = sequelize.define("Gift", {
     },
     price: {
         type: DataTypes.DECIMAL,
-        allowNull: false
+        allowNull: true
     },
     url: {
         type: DataTypes.STRING,

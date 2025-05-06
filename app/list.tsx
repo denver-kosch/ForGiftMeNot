@@ -11,10 +11,8 @@ import PageBreak from '@/components/pagebreak';
 
 const List = () => {
 	const styles = useListStyles();
-
 	const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 	const token = useSelector((state: AuthState) => state.auth.token);
-	console.log(token);
 	const [lists, setLists] = useState<{ owned: ListType[], shared: ListType[] }>({ owned: [], shared: [] });
 
 	useFocusEffect(
