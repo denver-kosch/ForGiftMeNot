@@ -1,11 +1,17 @@
 import {ColorSchemeName, StyleSheet} from 'react-native';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
-const text = { light: "#000", dark: "#fff" };
-const background = { light: "#fff9e2", dark: "#333" };
-const sectionBackground = { light: "#EDEDED", dark: "#444" };
-const border = { light: "#ddd", dark: "#666" };
+// Define color constants for light themes
+const [cornsilk, umber, crayola_blue, off_white]= ['#fff9e2', '#7f675b', '#0075f2', '#ededed'];
+// Dark theme colors
+const [jet, onyx, dim_gray] = ['#333', '#444', '#666'];
 
+const text = { light: "#000", dark: "#fff" };
+const background = { light: cornsilk, dark: jet };
+const sectionBackground = { light: off_white, dark: onyx };
+const border = { light: crayola_blue, dark: dim_gray };
+
+//Additional colors (I don't know if these will be used yet, but they are here for future use)
 
 const createHomeStyles = (colorScheme: ColorSchemeName) => StyleSheet.create({
     container: {
@@ -82,7 +88,7 @@ const createProfileStyles = (colorScheme: ColorSchemeName) => StyleSheet.create(
         fontSize: 40,
         fontWeight: "bold",
         width: "100%",
-        textAlign: "left",
+        textAlign: "center",
         paddingHorizontal: 20,
         color: colorScheme === 'dark' ? text.dark : text.light,
     },
@@ -99,6 +105,19 @@ const createProfileStyles = (colorScheme: ColorSchemeName) => StyleSheet.create(
         minWidth: '80%',
         color: colorScheme === 'dark' ? text.dark : text.light,
     },
+    profilePic: {
+        height: 125,
+        width: 125,
+        marginBottom: 20
+    },
+    button: {
+        backgroundColor: colorScheme === 'dark' ? sectionBackground.dark : sectionBackground.light,
+        padding: 10,
+        borderRadius: 5,
+        marginBottom: 20,
+        fontSize: 16,
+        color: colorScheme === 'dark' ? text.dark : text.light,
+    }
 });
 
 const createListStyles = (colorScheme: ColorSchemeName) => StyleSheet.create({
@@ -164,12 +183,9 @@ const createListStyles = (colorScheme: ColorSchemeName) => StyleSheet.create({
     },
     button: {
         backgroundColor: colorScheme === 'dark' ? sectionBackground.dark : sectionBackground.light,
-        paddingTop: 10,
-        paddingBottom: 10,
         borderRadius: 5,
         textAlign: "center",
         color: colorScheme === 'dark' ? text.dark : text.light,
-
     },
 });
 

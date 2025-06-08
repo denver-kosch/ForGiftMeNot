@@ -1,6 +1,6 @@
 import { useListStyles } from '@/styles';
 import { useFocusEffect, useNavigation, NavigationProp } from '@react-navigation/native';
-import { Suspense, useCallback, useState } from 'react';
+import { Suspense, useCallback, useState, useMemo } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import apiCall from '@/services/apiCall';
 import { ListType, RootStackParamList, AuthState } from '@/types';
@@ -25,18 +25,22 @@ const List = () => {
 		}, [])
 	);
 
-	const ListPreview = ({ list }: { list: ListType }) => {
+	const ListPreview = ({ list, shared }: { list: ListType, shared: boolean }) => {
 		const { id, name, description, owner } = list;
 		return (
 			<TouchableOpacity onPress={() => navigation.navigate('ListDetail', { id })} style={styles.listPreview} key={id}>
 				<View>
 					<Text style={styles.listName}>{name}</Text>
 					<Text style={styles.listDescription}>{description}</Text>
-					{owner && <Text style={styles.listOwner}>Owner: {owner}</Text>}
+					{shared && <Text style={styles.listOwner}>Owner: {owner}</Text>}
 				</View>
 			</TouchableOpacity>
 		)
 	};
+
+	const ownedListPreviews = useMemo(() => lists.owned.map(list => <ListPreview key={list.id} list={list} shared={false} />), [lists.owned]);
+
+	const sharedListPreviews = useMemo(() =>lists.shared.map(list => <ListPreview key={list.id} list={list} shared={true} />), [lists.shared]);
 
 	return (
 	<View style={styles.container}>
@@ -51,7 +55,7 @@ const List = () => {
 			<Suspense fallback={<ActivityIndicator size="large" color="#b8a96e" />}>
 				{lists.owned.length > 0 ? 
 				<ScrollView>
-					{lists.owned.map(list => <ListPreview key={list.id} list={list} />)}
+					{ownedListPreviews}
 				</ScrollView> :
 				<Text style={[styles.text, {padding: 5}]}>You don't have any lists yet.</Text>
 				}
@@ -63,7 +67,7 @@ const List = () => {
 			<Suspense fallback={<ActivityIndicator size="large" color="#b8a96e" />}>
 				{lists.shared.length > 0 ? 
 				<ScrollView>
-					{lists.shared.map(list => <ListPreview key={list.id} list={list} />)}
+					{sharedListPreviews}
 				</ScrollView> :
 				<Text style={[styles.text, {padding: 5, justifyContent: 'center'}]}>You haven't been shared any lists yet.</Text>
 				}

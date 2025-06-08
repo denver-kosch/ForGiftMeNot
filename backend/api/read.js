@@ -1,19 +1,20 @@
 import { User, List, Gift, UserList } from "../models.js";
 import { extractToken } from "./authentication.js";
-import { ApiError } from "../functions.js";
+import { ApiError, makeBackendUrl } from "../functions.js";
 
 export const getLists = async (req) => {
     try {
         const id = extractToken(req);
         const { owned , shared } = req.body;
-        console.log(id)
+
         if (!id) throw new ApiError(401, "Unauthorized");
         if (!owned && !shared) throw new ApiError(400, "No lists to fetch");
         
         const user = await User.findByPk(id);
         if (!user) throw new ApiError(404, "User not found");
+        
         const lists = {};
-        if (owned) lists.owned = await List.findAll({ where: { owner: id }, include: { model: User }, logging: console.log });
+        if (owned) lists.owned = await List.findAll({ where: { owner: id }, include: { model: User } });
         if (shared) lists.shared = await UserList.findAll({ where: { user: id }, include: { model: List } });
         
         return { status: 200, content: {lists} };
@@ -58,6 +59,8 @@ export const getUser = async (req) => {
         if (include.length && exclude.length) throw new ApiError(400, "Include and exclude cannot be used together");
 
         const userData = await User.findByPk(id, { attributes: include.length ? include : { exclude } });
+        userData.profilePic = makeBackendUrl(`images/profilePic/${userData.profilePic}`);
+
         if (!userData) throw new ApiError(404, "User not found");
 
 

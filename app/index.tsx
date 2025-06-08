@@ -23,7 +23,7 @@ export default function Index() {
     	  <Text style={styles.header}>Welcome,</Text>
 
         <View style={styles.sharedListMiniBoard}>
-          {/* This view contain (if any) shared lists with you, and underneath it as a subttitle, 
+          {/* This view contain (if any) shared lists with you, and underneath it as a subtitle, 
           will be a fading carousel, going through what you've currently marked as interested in buying and what new additions there are*/}
           <Text style={styles.text}>Shared Lists</Text>
           
