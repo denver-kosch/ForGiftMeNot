@@ -6,6 +6,8 @@ export type RootStackParamList = {
     Login: undefined;
     ListDetail: { id: string };
     CreateList: undefined;
+    EditProfile: undefined;
+    Register: undefined;
   };
   
 
@@ -32,3 +34,4 @@ export type ListType = {
     description: string;
     lastUpdated?: string;
 };
+

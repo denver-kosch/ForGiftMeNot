@@ -108,7 +108,7 @@ const createProfileStyles = (colorScheme: ColorSchemeName) => StyleSheet.create(
     profilePic: {
         height: 125,
         width: 125,
-        marginBottom: 20
+        marginBottom: 10
     },
     button: {
         backgroundColor: colorScheme === 'dark' ? sectionBackground.dark : sectionBackground.light,
@@ -117,7 +117,7 @@ const createProfileStyles = (colorScheme: ColorSchemeName) => StyleSheet.create(
         marginBottom: 20,
         fontSize: 16,
         color: colorScheme === 'dark' ? text.dark : text.light,
-    }
+    },
 });
 
 const createListStyles = (colorScheme: ColorSchemeName) => StyleSheet.create({
@@ -260,6 +260,84 @@ const createListDetailStyles = (colorScheme: ColorSchemeName) => StyleSheet.crea
 
 });
 
+const createModalStyles = (colorScheme: ColorSchemeName) => StyleSheet.create({
+    modalBackdrop: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+    },
+    modalContent: {
+        width: "80%",
+        backgroundColor: colorScheme === 'dark' ? sectionBackground.dark : sectionBackground.light,
+        padding: 20,
+        borderRadius: 10,
+        alignItems: "center",
+    },
+    modalTitle: {
+        fontSize: 24,
+        fontWeight: "bold",
+        marginBottom: 20,
+        color: colorScheme === 'dark' ? text.dark : text.light,
+    },
+    previewImage: {
+        width: 100,
+        height: 100,
+        borderRadius: 10,
+        marginBottom: 20,
+    },
+    placeholderShape: {
+        width: 100,
+        height: 100,
+        backgroundColor: colorScheme === 'dark' ? sectionBackground.dark : sectionBackground.light,
+        borderRadius: 10,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    placeholderText: {
+        color: colorScheme === 'dark' ? text.dark : text.light,
+        fontSize: 16,
+    },
+    cancelText: {
+        color: colorScheme === 'dark' ? text.dark : text.light,
+        fontSize: 16,
+        marginTop: 20,
+        textAlign: "center",
+    },
+    button: {
+        backgroundColor: colorScheme === 'dark' ? sectionBackground.dark : sectionBackground.light,
+        padding: 10,
+        borderRadius: 5,
+        marginBottom: 20,
+    },
+    text: {
+        fontSize: 16,
+        color: colorScheme === 'dark' ? text.dark : text.light,
+    },
+    input: {
+        height: 40,
+        borderColor: 'gray',
+        borderWidth: 1,
+        marginBottom: 20,
+        paddingLeft: 10,
+        minWidth: '80%',
+        color: colorScheme === 'dark' ? text.dark : text.light,
+    },
+    container: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: colorScheme === 'dark' ? background.dark : background.light,
+        width: "100%",
+        color: colorScheme === 'dark' ? text.dark : text.light,
+    },
+    title: {
+        fontSize: 24,
+        fontWeight: "bold",
+        marginBottom: 20,
+        color: colorScheme === 'dark' ? text.dark : text.light,
+    },
+});
 
 
 
@@ -276,3 +354,4 @@ export const useCreateListStyles = () => createCreateListStyles(useColorScheme()
 
 export const useListDetailStyles = () => createListDetailStyles(useColorScheme());
 
+export const useModalStyles = () => createModalStyles(useColorScheme());

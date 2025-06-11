@@ -2,19 +2,24 @@ import express from 'express';
 import { createServer } from 'http';
 import { connectDB } from './models.js';
 import cors from 'cors';
+import multer from 'multer';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 import { asyncHandler } from './functions.js';
 import { register, login, auth } from './api/authentication.js';
 import { SERVER_HOST, SERVER_PORT } from './config.js';
 import { createList, addToList, createGift } from './api/create.js';
 import { getLists, getList, getUser } from './api/read.js';
-import { updateList, updateGift, updateUser } from './api/update.js';
+import { updateList, updateGift, updateUser, updateProfilePic } from './api/update.js';
 import { deleteList, deleteGift, deleteUser } from './api/delete.js';
 
 
 const app = express();
+const upload = multer({ storage: multer.memoryStorage() });
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 
-app.use(express.json(), cors(), express.urlencoded({ extended: true }), express.static('public'));
+app.use(express.json(), cors(), express.urlencoded({ extended: true }), express.static(join(__dirname, 'public')));
 const server = createServer(app);
 
 (async () => {
@@ -53,6 +58,8 @@ app.post('/updateList', asyncHandler(updateList));
 app.post('/updateGift', asyncHandler(updateGift));
 
 app.post('/updateUser', asyncHandler(updateUser));
+
+app.post('/updateProfilePic', upload.single('image'), asyncHandler(updateProfilePic));
 
 // Delete routes
 app.post('/deleteList', asyncHandler(deleteList));

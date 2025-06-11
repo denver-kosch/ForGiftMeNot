@@ -1,6 +1,7 @@
 import { User, List, Gift, UserList } from "../models.js";
 import { extractToken } from "./authentication.js";
 import { ApiError, makeBackendUrl } from "../functions.js";
+import { existsSync } from "fs";
 
 export const getLists = async (req) => {
     try {
@@ -58,13 +59,13 @@ export const getUser = async (req) => {
         if (!Array.isArray(include) || !Array.isArray(exclude)) throw new ApiError(400, "Include and exclude must be arrays");
         if (include.length && exclude.length) throw new ApiError(400, "Include and exclude cannot be used together");
 
-        const userData = await User.findByPk(id, { attributes: include.length ? include : { exclude } });
-        userData.profilePic = makeBackendUrl(`images/profilePic/${userData.profilePic}`);
-
+        const userData = (await User.findByPk(id, { attributes: include.length ? include : { exclude } })).dataValues;
         if (!userData) throw new ApiError(404, "User not found");
 
 
-        return { status: 200, content: {userData: userData.dataValues}};
+        userData.profilePic = existsSync(`./public/images/profilePic/${id}.png`) ? makeBackendUrl(`/images/profilePic/${id}.png`) : makeBackendUrl(`/images/profilePic/placeholder.png`);
+
+        return { status: 200, content: {userData}};
     } catch (error) {
         throw new ApiError(500, error.message);
     }
