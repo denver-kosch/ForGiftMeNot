@@ -39,3 +39,6 @@ yarn-error.*
 app-example
 .eslintrc.js
 expo-env.d.ts
+
+# Backend public files
+/backend/public/
