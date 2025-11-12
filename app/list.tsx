@@ -17,16 +17,19 @@ const List = () => {
 
 	useFocusEffect(
 		useCallback(() => {
+			console.log(token)
 			const fetchLists = async () => {
 				const response = await apiCall('getLists', {owned: true, shared: true}, {"Authorization": `Bearer ${token}`});
 				if (response.success) setLists(response.lists);
 			};
-			fetchLists();
-		}, [])
+			if (token) fetchLists();
+			else setLists({ owned: [], shared: [] });
+		}, [token])
 	);
 
 	const ListPreview = ({ list, shared }: { list: ListType, shared: boolean }) => {
 		const { id, name, description, owner } = list;
+		console.log(id, shared);
 		return (
 			<TouchableOpacity onPress={() => navigation.navigate('ListDetail', { id })} style={styles.listPreview} key={id}>
 				<View>
@@ -38,9 +41,9 @@ const List = () => {
 		)
 	};
 
-	const ownedListPreviews = useMemo(() => lists.owned.map(list => <ListPreview key={list.id} list={list} shared={false} />), [lists.owned]);
+	const ownedListPreviews = useMemo(() => lists.owned.map(list => <ListPreview key={list.id+"o"} list={list} shared={false} />), [lists.owned]);
 
-	const sharedListPreviews = useMemo(() =>lists.shared.map(list => <ListPreview key={list.id} list={list} shared={true} />), [lists.shared]);
+	const sharedListPreviews = useMemo(() =>lists.shared.map(list => <ListPreview key={list.id+"s"} list={list} shared={true} />), [lists.shared]);
 
 	return (
 	<View style={styles.container}>
