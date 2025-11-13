@@ -6,6 +6,8 @@ import apiCall from '@/services/apiCall';
 import { ListType, RootStackParamList, AuthState } from '@/types';
 import { useSelector } from 'react-redux';
 import PageBreak from '@/components/pagebreak';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+import LoadingIcon from '../components/loadingIcon';
 
 
 
@@ -14,22 +16,24 @@ const List = () => {
 	const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 	const token = useSelector((state: AuthState) => state.auth.token);
 	const [lists, setLists] = useState<{ owned: ListType[], shared: ListType[] }>({ owned: [], shared: [] });
+	const [gettingLists, setGettingLists] = useState(false);
 
 	useFocusEffect(
 		useCallback(() => {
-			console.log(token)
+			setGettingLists(true);
 			const fetchLists = async () => {
 				const response = await apiCall('getLists', {owned: true, shared: true}, {"Authorization": `Bearer ${token}`});
 				if (response.success) setLists(response.lists);
 			};
 			if (token) fetchLists();
 			else setLists({ owned: [], shared: [] });
+
 		}, [token])
 	);
 
 	const ListPreview = ({ list, shared }: { list: ListType, shared: boolean }) => {
 		const { id, name, description, owner } = list;
-		console.log(id, shared);
+		console.log(id, name, description, owner);
 		return (
 			<TouchableOpacity onPress={() => navigation.navigate('ListDetail', { id })} style={styles.listPreview} key={id}>
 				<View>
@@ -56,24 +60,18 @@ const List = () => {
 		<View style={styles.listBlock}>
 			<Text style={styles.header}>Your Lists:</Text>
 			<Suspense fallback={<ActivityIndicator size="large" color="#b8a96e" />}>
-				{lists.owned.length > 0 ? 
-				<ScrollView>
-					{ownedListPreviews}
-				</ScrollView> :
-				<Text style={[styles.text, {padding: 5}]}>You don't have any lists yet.</Text>
-				}
+				{gettingLists ? <LoadingIcon/> :
+				lists.owned.length > 0 ? <ScrollView>{ownedListPreviews}</ScrollView> :
+				<Text style={[styles.text, {padding: 5}]}>You don't have any lists yet.</Text>}
 			</Suspense>
 		</View>
 		<PageBreak />
 		<View style={styles.listBlock}>
 			<Text style={styles.header}>Shared Lists:</Text>
 			<Suspense fallback={<ActivityIndicator size="large" color="#b8a96e" />}>
-				{lists.shared.length > 0 ? 
-				<ScrollView>
-					{sharedListPreviews}
-				</ScrollView> :
-				<Text style={[styles.text, {padding: 5, justifyContent: 'center'}]}>You haven't been shared any lists yet.</Text>
-				}
+				{gettingLists ? <LoadingIcon/> :
+				lists.shared.length > 0 ? <ScrollView>{sharedListPreviews}</ScrollView> :
+				<Text style={[styles.text, {padding: 5, justifyContent: 'center'}]}>You haven't been shared any lists yet.</Text>}
 			</Suspense>
 		</View>
 	</View>

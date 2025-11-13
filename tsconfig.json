@@ -17,5 +17,6 @@
     "backend/backend.js",
     "backend/functions.js",
     "store.js"
-  ]
+  ],
+  "extends": "expo/tsconfig.base"
 }

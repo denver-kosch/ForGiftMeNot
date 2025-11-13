@@ -15,10 +15,10 @@ export const getLists = async (req) => {
         if (!user) throw new ApiError(404, "User not found");
         
         const lists = {};
-        if (owned) lists.owned = await List.findAll({ where: { owner: id }, include: { model: User } });
-        if (shared) lists.shared = await UserList.findAll({ where: { user: id }, include: { model: List } });
+        if (owned) lists.owned = (await List.findAll({ where: { owner: id }, include: { model: User } })).map(ul => ul.dataValues);
+        if (shared) lists.shared = (await UserList.findAll({ where: { user: id }, include: { model: List } })).map(ul => ul.List.dataValues);
         
-        return { status: 200, content: {lists} };
+        return { status: 200, content: { lists } };
     } catch (error) {
         console.log(error);
         throw new ApiError(500, error.message);

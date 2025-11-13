@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useProfileStyles } from '@/styles';
 import { useCallback, useState, useEffect } from 'react';
 import apiCall from '@/services/apiCall';
-import PFPModal from './components/profilePicModal';
-import EditProfileModal from './components/editProfileModal';
+import PFPModal from '../components/profilePicModal';
+import EditProfileModal from '../components/editProfileModal';
 import LoadingIcon from '../assets/images/loadingIcon.png';
 
 const ProfilePage = () => {
