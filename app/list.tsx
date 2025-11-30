@@ -27,13 +27,12 @@ const List = () => {
 			};
 			if (token) fetchLists();
 			else setLists({ owned: [], shared: [] });
-
+			setGettingLists(false);
 		}, [token])
 	);
 
 	const ListPreview = ({ list, shared }: { list: ListType, shared: boolean }) => {
 		const { id, name, description, owner } = list;
-		console.log(id, name, description, owner);
 		return (
 			<TouchableOpacity onPress={() => navigation.navigate('ListDetail', { id })} style={styles.listPreview} key={id}>
 				<View>
@@ -53,12 +52,12 @@ const List = () => {
 	<View style={styles.container}>
 		<View style={styles.topBar}>
 			<Text style={[styles.header, {width: '50%'}]}>Lists</Text>
-			<TouchableOpacity style ={{width: '50%'}} onPress={() => navigation.navigate('CreateList')}>
+			<TouchableOpacity onPress={() => navigation.navigate('CreateList')}>
 				<Text style={[styles.button]}>Create New List</Text>
 			</TouchableOpacity>
 		</View>
 		<View style={styles.listBlock}>
-			<Text style={styles.header}>Your Lists:</Text>
+			<Text style={styles.blockHeader}>Your Lists:</Text>
 			<Suspense fallback={<ActivityIndicator size="large" color="#b8a96e" />}>
 				{gettingLists ? <LoadingIcon/> :
 				lists.owned.length > 0 ? <ScrollView>{ownedListPreviews}</ScrollView> :
@@ -67,7 +66,7 @@ const List = () => {
 		</View>
 		<PageBreak />
 		<View style={styles.listBlock}>
-			<Text style={styles.header}>Shared Lists:</Text>
+			<Text style={styles.blockHeader}>Shared Lists:</Text>
 			<Suspense fallback={<ActivityIndicator size="large" color="#b8a96e" />}>
 				{gettingLists ? <LoadingIcon/> :
 				lists.shared.length > 0 ? <ScrollView>{sharedListPreviews}</ScrollView> :

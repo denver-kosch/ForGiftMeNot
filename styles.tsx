@@ -126,11 +126,13 @@ const createListStyles = (colorScheme: ColorSchemeName) => StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: colorScheme === 'dark' ? background.dark : background.light,
-        width: "100%",
+        maxWidth: "100%",
+        maxHeight: "100%",
         color: colorScheme === 'dark' ? text.dark : text.light,
+        paddingTop: 50
     },
     header: {
-        fontSize: 40,
+        fontSize: 48,
         fontWeight: "bold",
         width: "100%",
         textAlign: "left",
@@ -168,12 +170,12 @@ const createListStyles = (colorScheme: ColorSchemeName) => StyleSheet.create({
     },
     listBlock: {
         width: "95%",
-        paddingTop: 20,
-        paddingBottom: 20,
         backgroundColor: colorScheme === 'dark' ? sectionBackground.dark : sectionBackground.light,
         borderRadius: 10,
         minHeight: 200,
-        maxHeight: 400,
+        maxHeight: "40%",
+        marginTop: 20,
+        marginBottom: 20,
     },
     topBar: {
         flexDirection: "row",
@@ -185,8 +187,17 @@ const createListStyles = (colorScheme: ColorSchemeName) => StyleSheet.create({
         backgroundColor: colorScheme === 'dark' ? sectionBackground.dark : sectionBackground.light,
         borderRadius: 5,
         textAlign: "center",
+        padding: 7,
         color: colorScheme === 'dark' ? text.dark : text.light,
     },
+    blockHeader: {
+        fontSize: 40,
+        fontWeight: "bold",
+        width: "100%",
+        textAlign: "left",
+        paddingHorizontal: 20,
+        color: colorScheme === 'dark' ? text.dark : text.light,
+    }
 });
 
 const createCreateListStyles = (colorScheme: ColorSchemeName) => StyleSheet.create({

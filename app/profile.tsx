@@ -40,7 +40,6 @@ const ProfilePage = () => {
 
     const fetchProfile = async () => {
         setLoading(true);
-        console.log("Fetching profile data...");
         const response = await apiCall(
             'getUser', 
             {include: ['id', 'firstName', 'lastName', 'admin', 'phoneNum', 'verified', 'username']}, 

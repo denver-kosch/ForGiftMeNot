@@ -8,7 +8,7 @@ const PageBreak = () => {
 			width: "80%",
 			height: 1,
 			backgroundColor: colorScheme === 'dark' ? "#444" : "#ddd",
-			marginVertical: 25,
+			marginVertical: 15,
 		}} />
 	);
 }
