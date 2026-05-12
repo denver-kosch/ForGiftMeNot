@@ -26,14 +26,8 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ visible, onClose, t
     const styles = useModalStyles();
 
     const handleSave = async () => {
-        // Call API to save changes
-        console.log("Saving profile changes:", { firstName, lastName, phoneNum, username });
-        // Here you would typically make an API call to save the changes
         const response = await apiCall('updateUser', { firstName, lastName, phoneNum, username }, { "Authorization": `Bearer ${token}` });
-        
-        if (response?.success) console.log("Profile updated successfully");
-        else console.error("Failed to update profile:", response?.message);
-        
+        if (!response?.success) console.error("Failed to update profile:", response?.message);
         fetchProfile();
         onClose();
     };

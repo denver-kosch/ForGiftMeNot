@@ -2,7 +2,6 @@ import { Sequelize, DataTypes } from "sequelize";
 import {DB_USER, DB_PASS, DB_HOST, DB_PORT} from "./config.js";
 
 export const sequelize = new Sequelize(`mysql://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/forgiftmenot`, {logging: false});
-
 export const connectDB = async () => {
     try {
         await sequelize.authenticate();

@@ -41,4 +41,4 @@ app-example
 expo-env.d.ts
 
 # Backend public files
-/backend/public/
+public/

@@ -39,5 +39,5 @@ const getLocalIP = () => {
   fs.writeFileSync(envPath, envContent);
 
   // Run the React app
-  execSync('expo start', { stdio: 'inherit' });
+  execSync('npx expo start', { stdio: 'inherit' });
 })();
