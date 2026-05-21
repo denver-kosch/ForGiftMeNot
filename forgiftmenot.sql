@@ -1,177 +1,238 @@
--- MySQL dump 10.13  Distrib 9.2.0, for macos15.2 (arm64)
---
--- Host: localhost    Database: forgiftmenot
--- ------------------------------------------------------
--- Server version	9.2.0
+-- ForGiftMeNot cleaned MySQL schema
+-- Generated from drawSQL export cleanup
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8mb4 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+DROP DATABASE IF EXISTS `forgiftmenot`;
+CREATE DATABASE `forgiftmenot` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `forgiftmenot`;
 
---
--- Table structure for table `Gifts`
---
-
+SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `Gifts`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Gifts` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `price` decimal(10,0) DEFAULT NULL,
-  `url` varchar(255) DEFAULT NULL,
-  `createdAt` datetime NOT NULL,
-  `updatedAt` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `Gifts`
---
-
-LOCK TABLES `Gifts` WRITE;
-/*!40000 ALTER TABLE `Gifts` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Gifts` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `ListGifts`
---
-
-DROP TABLE IF EXISTS `ListGifts`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ListGifts` (
-  `createdAt` datetime NOT NULL,
-  `updatedAt` datetime NOT NULL,
-  `list` int NOT NULL,
-  `gift` int NOT NULL,
-  PRIMARY KEY (`list`,`gift`),
-  KEY `gift` (`gift`),
-  CONSTRAINT `listgifts_ibfk_1` FOREIGN KEY (`list`) REFERENCES `Lists` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `listgifts_ibfk_2` FOREIGN KEY (`gift`) REFERENCES `Gifts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `ListGifts`
---
-
-LOCK TABLES `ListGifts` WRITE;
-/*!40000 ALTER TABLE `ListGifts` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ListGifts` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `Lists`
---
-
-DROP TABLE IF EXISTS `Lists`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Lists` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `owner` int NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `description` text,
-  `createdAt` datetime NOT NULL,
-  `updatedAt` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `owner` (`owner`),
-  CONSTRAINT `lists_ibfk_1` FOREIGN KEY (`owner`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `Lists`
---
-
-LOCK TABLES `Lists` WRITE;
-/*!40000 ALTER TABLE `Lists` DISABLE KEYS */;
-INSERT INTO `Lists` VALUES (1,2,'Alice\'s Christmas','Christmas 2025','2025-06-11 03:25:35','2025-06-11 03:25:35'),(2,1,'Reading List','Books Bob wants','2025-06-11 03:25:35','2025-06-11 03:25:35'),(3,3,'Carol\'s Home Needs','Furniture, kitchen stuff','2025-06-11 03:25:35','2025-06-11 03:25:35'),(4,2,'Alice\'s Birthday','Gifts for Alice','2025-06-11 03:25:35','2025-06-11 03:25:35'),(5,1,'Bob\'s Tech','Gadgets and tech','2025-06-11 03:25:35','2025-06-11 03:25:35');
-/*!40000 ALTER TABLE `Lists` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `UserLists`
---
-
 DROP TABLE IF EXISTS `UserLists`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `UserLists` (
-  `createdAt` datetime NOT NULL,
-  `updatedAt` datetime NOT NULL,
-  `user` int NOT NULL,
-  `list` int NOT NULL,
-  PRIMARY KEY (`user`,`list`),
-  KEY `list` (`list`),
-  CONSTRAINT `userlists_ibfk_1` FOREIGN KEY (`user`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `userlists_ibfk_2` FOREIGN KEY (`list`) REFERENCES `Lists` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `UserLists`
---
-
-LOCK TABLES `UserLists` WRITE;
-/*!40000 ALTER TABLE `UserLists` DISABLE KEYS */;
-INSERT INTO `UserLists` VALUES ('2025-06-11 03:25:35','2025-06-11 03:25:35',1,3),('2025-06-11 03:25:35','2025-06-11 03:25:35',1,4),('2025-06-11 03:25:35','2025-06-11 03:25:35',2,1),('2025-06-11 03:25:35','2025-06-11 03:25:35',3,5);
-/*!40000 ALTER TABLE `UserLists` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `Users`
---
-
+DROP TABLE IF EXISTS `Lists`;
 DROP TABLE IF EXISTS `Users`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+SET FOREIGN_KEY_CHECKS = 1;
+
 CREATE TABLE `Users` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `firstName` varchar(255) DEFAULT NULL,
-  `lastName` varchar(255) DEFAULT NULL,
-  `email` varchar(255) NOT NULL,
-  `phoneNum` varchar(255) DEFAULT NULL,
-  `verified` tinyint(1) NOT NULL DEFAULT '0',
-  `admin` tinyint(1) NOT NULL DEFAULT '0',
-  `createdAt` datetime NOT NULL,
-  `updatedAt` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`),
-  UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `username` VARCHAR(255) NOT NULL,
+    `password_hash` VARCHAR(255) NOT NULL,
+    `first_name` VARCHAR(255) NULL,
+    `last_name` VARCHAR(255) NULL,
+    `email` VARCHAR(255) NOT NULL,
+    `phone_num` VARCHAR(255) NULL,
+    `verified` TINYINT(1) NOT NULL DEFAULT 0,
+    `admin` TINYINT(1) NOT NULL DEFAULT 0,
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
---
--- Dumping data for table `Users`
---
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `users_username_unique` (`username`),
+    UNIQUE KEY `users_email_unique` (`email`),
+    UNIQUE KEY `users_phone_num_unique` (`phone_num`)
+);
 
-LOCK TABLES `Users` WRITE;
-/*!40000 ALTER TABLE `Users` DISABLE KEYS */;
-INSERT INTO `Users` VALUES (1,'bob','$2b$10$8I0xW7cqO/2I..SnsxsQLeRBIfD2xrD.UhSmmhSG8tIPYlmM8SFsy','Bob','Brown','bob@example.com','1234567890',1,0,'2025-06-11 03:25:35','2025-11-30 01:27:47'),(2,'alice','$2b$10$8I0xW7cqO/2I..SnsxsQLeRBIfD2xrD.UhSmmhSG8tIPYlmM8SFsy','Alice','Anderson','alice@example.com','1234567890',1,0,'2025-06-11 03:25:35','2025-06-11 03:25:35'),(3,'carol','$2b$10$8I0xW7cqO/2I..SnsxsQLeRBIfD2xrD.UhSmmhSG8tIPYlmM8SFsy','Carol','Clark','carol@example.com','1234567892',1,1,'2025-06-11 03:25:35','2025-06-11 03:25:35');
-/*!40000 ALTER TABLE `Users` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+CREATE TABLE `Lists` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `owner_id` INT NOT NULL,
+    `name` VARCHAR(255) NOT NULL,
+    `description` TEXT NULL,
+    `is_shareable` BOOLEAN NOT NULL DEFAULT FALSE,
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+    PRIMARY KEY (`id`),
+    KEY `lists_owner_id_index` (`owner_id`),
 
--- Dump completed on 2026-01-26 19:32:26
+    CONSTRAINT `lists_owner_id_foreign`
+        FOREIGN KEY (`owner_id`) REFERENCES `Users` (`id`)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+CREATE TABLE `UserLists` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `user_id` INT NOT NULL,
+    `list_id` INT NOT NULL,
+    `role` ENUM('owner', 'editor', 'viewer') NOT NULL DEFAULT 'viewer',
+    `last_opened_at` DATETIME NULL,
+    `pinned_at` DATETIME NULL,
+    `archived_at` DATETIME NULL,
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `userlists_user_id_list_id_unique` (`user_id`, `list_id`),
+    KEY `userlists_list_id_index` (`list_id`),
+    KEY `userlists_recent_index` (`user_id`, `archived_at`, `pinned_at`, `last_opened_at`),
+
+    CONSTRAINT `userlists_user_id_foreign`
+        FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+
+    CONSTRAINT `userlists_list_id_foreign`
+        FOREIGN KEY (`list_id`) REFERENCES `Lists` (`id`)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+CREATE TABLE `Gifts` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `list_id` INT NOT NULL,
+    `name` VARCHAR(255) NOT NULL,
+    `description` TEXT NULL,
+    `price` DECIMAL(10, 2) NULL,
+    `url` VARCHAR(2048) NULL,
+    `image_url` VARCHAR(2048) NULL,
+    `quantity` INT NOT NULL DEFAULT 1,
+    `priority` ENUM('low', 'medium', 'high') NULL,
+    `reserved_by_user_id` INT NULL,
+    `purchased_by_user_id` INT NULL,
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    PRIMARY KEY (`id`),
+    KEY `gifts_list_id_index` (`list_id`),
+    KEY `gifts_reserved_by_user_id_index` (`reserved_by_user_id`),
+    KEY `gifts_purchased_by_user_id_index` (`purchased_by_user_id`),
+
+    CONSTRAINT `gifts_list_id_foreign`
+        FOREIGN KEY (`list_id`) REFERENCES `Lists` (`id`)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+
+    CONSTRAINT `gifts_reserved_by_user_id_foreign`
+        FOREIGN KEY (`reserved_by_user_id`) REFERENCES `Users` (`id`)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE,
+
+    CONSTRAINT `gifts_purchased_by_user_id_foreign`
+        FOREIGN KEY (`purchased_by_user_id`) REFERENCES `Users` (`id`)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE,
+
+    CONSTRAINT `gifts_quantity_check` 
+        CHECK (`quantity` > 0)
+);
+
+
+-- =========================================
+-- Seed Users
+-- Password for all users:
+-- $2b$10$8I0xW7cqO/2I..SnsxsQLeRBIfD2xrD.UhSmmhSG8tIPYlmM8SFsy
+-- =========================================
+
+INSERT INTO `Users`
+(`username`, `password_hash`, `first_name`, `last_name`, `email`, `phone_num`, `verified`, `admin`)
+VALUES
+('denver', '$2b$10$8I0xW7cqO/2I..SnsxsQLeRBIfD2xrD.UhSmmhSG8tIPYlmM8SFsy', 'Denver', 'Smith', 'denver@example.com', '6145551001', 1, 1),
+('alice', '$2b$10$8I0xW7cqO/2I..SnsxsQLeRBIfD2xrD.UhSmmhSG8tIPYlmM8SFsy', 'Alice', 'Johnson', 'alice@example.com', '6145551002', 1, 0),
+('bob', '$2b$10$8I0xW7cqO/2I..SnsxsQLeRBIfD2xrD.UhSmmhSG8tIPYlmM8SFsy', 'Bob', 'Williams', 'bob@example.com', '6145551003', 1, 0),
+('carol', '$2b$10$8I0xW7cqO/2I..SnsxsQLeRBIfD2xrD.UhSmmhSG8tIPYlmM8SFsy', 'Carol', 'Davis', 'carol@example.com', '6145551004', 1, 0);
+
+-- =========================================
+-- Seed Lists
+-- =========================================
+
+INSERT INTO `Lists`
+(`owner_id`, `name`, `description`, `is_shareable`)
+VALUES
+(1, 'Denver Birthday Wishlist', 'Things Denver wants for birthday', TRUE),
+(1, 'Private Tech Upgrades', 'Personal hardware planning', FALSE),
+(2, 'Alice Wedding Ideas', 'Wedding registry and ideas', TRUE),
+(3, 'Bob Gaming Setup', 'Streaming and gaming gear', TRUE);
+
+-- =========================================
+-- Seed UserLists
+-- =========================================
+
+INSERT INTO `UserLists`
+(`user_id`, `list_id`, `role`, `last_opened_at`, `pinned_at`)
+VALUES
+-- Denver owns his lists
+(1, 1, 'owner', NOW(), NOW()),
+(1, 2, 'owner', NOW(), NULL),
+
+-- Alice owns hers
+(2, 3, 'owner', NOW(), NULL),
+
+-- Bob owns his
+(3, 4, 'owner', NOW(), NULL),
+
+-- Shared access
+(2, 1, 'viewer', NOW(), NULL),
+(3, 1, 'editor', NOW(), NULL),
+(4, 1, 'viewer', NOW(), NULL),
+
+(1, 3, 'editor', NOW(), NULL),
+(4, 3, 'viewer', NOW(), NULL),
+
+(1, 4, 'viewer', NOW(), NULL);
+
+-- =========================================
+-- Seed Gifts
+-- =========================================
+
+INSERT INTO `Gifts`
+(`list_id`, `name`, `description`, `price`, `url`, `image_url`, `quantity`, `priority`, `reserved_by_user_id`, `purchased_by_user_id`)
+VALUES
+(
+    1,
+    'Sony WH-1000XM5 Headphones',
+    'Noise cancelling headphones',
+    349.99,
+    'https://www.amazon.com/',
+    NULL,
+    1,
+    'high',
+    2,
+    NULL
+),
+(
+    1,
+    'Steam Gift Card',
+    'Wallet funds for games',
+    50.00,
+    NULL,
+    NULL,
+    2,
+    'medium',
+    NULL,
+    NULL
+),
+(
+    2,
+    'RTX 5070',
+    'GPU upgrade for gaming PC',
+    699.99,
+    NULL,
+    NULL,
+    1,
+    'high',
+    NULL,
+    NULL
+),
+(
+    3,
+    'Wedding Venue Decorations',
+    'Decor inspiration pieces',
+    200.00,
+    NULL,
+    NULL,
+    1,
+    'medium',
+    1,
+    NULL
+),
+(
+    4,
+    'Elgato Stream Deck',
+    'Streaming control pad',
+    149.99,
+    NULL,
+    NULL,
+    1,
+    'low',
+    NULL,
+    NULL
+);

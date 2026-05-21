@@ -33,14 +33,6 @@ const createHomeStyles = (colorScheme: ColorSchemeName) => StyleSheet.create({
         fontSize: 16,
         color: colorScheme === 'dark' ? text.dark : text.light,
     },
-    sharedListMiniBoard: {
-        width: "90%",
-        alignSelf: "center",
-        padding: 20,
-        marginTop: 40,
-        backgroundColor: colorScheme === 'dark' ? sectionBackground.dark : sectionBackground.light,
-        borderRadius: 10,
-    },
 });
 
 const createLoginStyles = (colorScheme: ColorSchemeName) => StyleSheet.create({

@@ -1,33 +1,41 @@
 import { ScrollView, Text, View, } from "react-native";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { useHomeStyles } from "@/styles"
 import { store } from "@/store";
+import apiCall from "@/services/apiCall";
 
 export default function Index() {
   const token = store.getState().auth.token;
   const styles = useHomeStyles();
+  const [name, setName] = useState(null);
+
 
 
   useFocusEffect(
     useCallback(() => {
-    
+      const fetchUser = async () => {
+        const user = await apiCall('getUser', {include:['firstName', '']}, { Authorization: `Bearer ${token}` });
+        if (user.success) setName(user.firstName);
+
+      }
+      if (token) fetchUser();
     }, [token])
   );
 
 
-  const IndexContents = () => {
-    return (
-      <View style={{ width: '100%' }}>
-    	  <Text style={styles.header}>Welcome,</Text>
+  const notLoggedInScreen = () => {
+    
+  };
 
-        <View style={styles.sharedListMiniBoard}>
-          {/* This view contain (if any) shared lists with you, and underneath it as a subtitle, 
-          will be a fading carousel, going through what you've currently marked as interested in buying and what new additions there are*/}
-          <Text style={styles.text}>Shared Lists</Text>
-          
-        </View>
+
+
+
+  const IndexContents = () => {
+    return ( 
+      <View style={{ width: '100%' }}>
+    	  <Text style={styles.header}>Welcome, </Text>
 
       </View>
     );
