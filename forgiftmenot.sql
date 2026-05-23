@@ -25,23 +25,20 @@ DROP TABLE IF EXISTS `gifts`;
 CREATE TABLE `gifts` (
   `id` int NOT NULL AUTO_INCREMENT,
   `list_id` int NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `price` decimal(10,2) DEFAULT NULL,
-  `url` varchar(2048) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `image_url` varchar(2048) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `url` varchar(2048) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image_url` varchar(2048) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `quantity` int NOT NULL DEFAULT '1',
-  `priority` enum('low','medium','high') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `priority` enum('low','medium','high') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `reserved_by_user_id` int DEFAULT NULL,
-  `purchased_by_user_id` int DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `gifts_list_id_index` (`list_id`),
   KEY `gifts_reserved_by_user_id_index` (`reserved_by_user_id`),
-  KEY `gifts_purchased_by_user_id_index` (`purchased_by_user_id`),
   CONSTRAINT `gifts_list_id_foreign` FOREIGN KEY (`list_id`) REFERENCES `lists` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `gifts_purchased_by_user_id_foreign` FOREIGN KEY (`purchased_by_user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `gifts_reserved_by_user_id_foreign` FOREIGN KEY (`reserved_by_user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `gifts_quantity_check` CHECK ((`quantity` > 0))
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -53,7 +50,7 @@ CREATE TABLE `gifts` (
 
 LOCK TABLES `gifts` WRITE;
 /*!40000 ALTER TABLE `gifts` DISABLE KEYS */;
-INSERT INTO `gifts` VALUES (1,1,'Sony WH-1000XM5 Headphones','Noise cancelling headphones',349.99,'https://www.amazon.com/',NULL,1,'high',2,NULL,'2026-05-21 10:06:18','2026-05-21 10:06:18'),(2,1,'Steam Gift Card','Wallet funds for games',50.00,NULL,NULL,2,'medium',NULL,NULL,'2026-05-21 10:06:18','2026-05-21 10:06:18'),(3,2,'RTX 5070','GPU upgrade for gaming PC',699.99,NULL,NULL,1,'high',NULL,NULL,'2026-05-21 10:06:18','2026-05-21 10:06:18'),(4,3,'Wedding Venue Decorations','Decor inspiration pieces',200.00,NULL,NULL,1,'medium',1,NULL,'2026-05-21 10:06:18','2026-05-21 10:06:18'),(5,4,'Elgato Stream Deck','Streaming control pad',149.99,NULL,NULL,1,'low',NULL,NULL,'2026-05-21 10:06:18','2026-05-21 10:06:18');
+INSERT INTO `gifts` VALUES (1,1,'Sony WH-1000XM5 Headphones','Noise cancelling headphones',349.99,'https://www.amazon.com/',NULL,1,'high',2,'2026-05-21 10:06:18','2026-05-21 10:06:18'),(2,1,'Steam Gift Card','Wallet funds for games',50.00,NULL,NULL,2,'medium',NULL,'2026-05-21 10:06:18','2026-05-21 10:06:18'),(3,2,'RTX 5070','GPU upgrade for gaming PC',699.99,NULL,NULL,1,'high',NULL,'2026-05-21 10:06:18','2026-05-21 10:06:18'),(4,3,'Wedding Venue Decorations','Decor inspiration pieces',200.00,NULL,NULL,1,'medium',1,'2026-05-21 10:06:18','2026-05-21 10:06:18'),(5,4,'Elgato Stream Deck','Streaming control pad',149.99,NULL,NULL,1,'low',NULL,'2026-05-21 10:06:18','2026-05-21 10:06:18');
 /*!40000 ALTER TABLE `gifts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -67,8 +64,8 @@ DROP TABLE IF EXISTS `lists`;
 CREATE TABLE `lists` (
   `id` int NOT NULL AUTO_INCREMENT,
   `owner_id` int NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `is_shareable` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -99,7 +96,7 @@ CREATE TABLE `userlists` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
   `list_id` int NOT NULL,
-  `role` enum('owner','editor','viewer') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'viewer',
+  `role` enum('owner','editor','viewer') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'viewer',
   `last_opened_at` datetime DEFAULT NULL,
   `pinned_at` datetime DEFAULT NULL,
   `archived_at` datetime DEFAULT NULL,
@@ -133,12 +130,12 @@ DROP TABLE IF EXISTS `users`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password_hash` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `first_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `last_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `phone_num` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password_hash` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `first_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `last_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone_num` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `verified` tinyint(1) NOT NULL DEFAULT '0',
   `admin` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -169,4 +166,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-05-21 10:19:31
+-- Dump completed on 2026-05-22 16:53:34

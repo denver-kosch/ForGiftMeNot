@@ -2,6 +2,17 @@ import { User, List, Gift, UserList } from "../models.js";
 import { extractToken } from "./authentication.js";
 import { ApiError, makeBackendUrl } from "../functions.js";
 import { existsSync } from "fs";
+import { Op } from "sequelize";
+
+const flattenMembership = (membership) => ({
+    ...membership.list.toJSON(),
+    membership: {
+        role: membership.role,
+        last_opened_at: membership.last_opened_at,
+        pinned_at: membership.pinned_at,
+        archived_at: membership.archived_at,
+    },
+});
 
 export const getLists = async (req) => {
     try {
@@ -15,9 +26,24 @@ export const getLists = async (req) => {
         if (!user) throw new ApiError(404, "User not found");
         
         const lists = {};
-        if (owned) lists.owned = (await List.findAll({ where: { owner: id }, include: { model: User } })).map(ul => ul.dataValues);
-        if (shared) lists.shared = (await UserList.findAll({ where: { user: id }, include: { model: List } })).map(ul => ul.List.dataValues);
-        
+        const baseQuery = { user_id: id, archived_at: null };
+
+        const includeList = { model: List, as: "list" };
+
+        const order = [
+            ["pinned_at", "DESC"],
+            ["last_opened_at", "DESC"],
+            [{ model: List, as: "list" }, "created_at", "DESC"]
+        ];
+
+        if (owned) {
+            const ownedMemberships = await UserList.findAll({ where: { ...baseQuery, role: "owner" }, include: [includeList], order });
+            lists.owned = ownedMemberships.map(flattenMembership);
+        }
+        if (shared) {
+            const sharedMemberships = await UserList.findAll({ where: {...baseQuery, role: { [Op.ne]: "owner" } }, include: [includeList], order });
+            lists.shared = sharedMemberships.map(flattenMembership);
+        }
         return { status: 200, content: { lists } };
     } catch (error) {
         console.log(error);
@@ -33,8 +59,10 @@ export const getList = async (req) => {
         if (!listId) throw new ApiError(400, "No list id provided");
         if (!id) throw new ApiError(401, "Unauthorized");
 
-        const user = await User.findByPk(id);
-        if (!user) throw new ApiError(404, "User not found with provided id");
+        const membership = await UserList.findOne({ 
+            where: { user_id: id, list_id: listId, archived_at: null }, 
+            include: [{ model: List, as: "list" }]
+        });
 
         const list = await List.findByPk(listId);
         if (!list) throw new ApiError(404, "List not found with provided id");
