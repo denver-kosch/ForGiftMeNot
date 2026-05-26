@@ -156,6 +156,36 @@ LOCK TABLES `users` WRITE;
 INSERT INTO `users` VALUES (1,'denver','$2b$10$8I0xW7cqO/2I..SnsxsQLeRBIfD2xrD.UhSmmhSG8tIPYlmM8SFsy','Denver','Smith','denver@example.com','6145551001',1,1,'2026-05-21 10:06:18','2026-05-21 10:06:18'),(2,'alice','$2b$10$8I0xW7cqO/2I..SnsxsQLeRBIfD2xrD.UhSmmhSG8tIPYlmM8SFsy','Alice','Johnson','alice@example.com','6145551002',1,0,'2026-05-21 10:06:18','2026-05-21 10:06:18'),(3,'bob','$2b$10$8I0xW7cqO/2I..SnsxsQLeRBIfD2xrD.UhSmmhSG8tIPYlmM8SFsy','Bob','Williams','bob@example.com','6145551003',1,0,'2026-05-21 10:06:18','2026-05-21 10:06:18'),(4,'carol','$2b$10$8I0xW7cqO/2I..SnsxsQLeRBIfD2xrD.UhSmmhSG8tIPYlmM8SFsy','Carol','Davis','carol@example.com','6145551004',1,0,'2026-05-21 10:06:18','2026-05-21 10:06:18');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `verificationtokens`
+--
+
+DROP TABLE IF EXISTS `verificationtokens`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `verificationtokens` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `method` enum('email','sms') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token_hash` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `expires_at` datetime NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `verificationtokens_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `verificationtokens`
+--
+
+LOCK TABLES `verificationtokens` WRITE;
+/*!40000 ALTER TABLE `verificationtokens` DISABLE KEYS */;
+/*!40000 ALTER TABLE `verificationtokens` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -166,4 +196,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-05-22 16:53:34
+-- Dump completed on 2026-05-25 23:17:33

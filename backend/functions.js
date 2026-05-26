@@ -8,6 +8,10 @@ export class ApiError extends Error {
   }
 };
 
+export const handleError = (error) => {
+  throw (error instanceof ApiError) ? error : new ApiError(500, error.message);
+}
+
 const sendJsonResponse = (res, status, content = {}) => {
     content.success = (status >= 200 && status < 300) ? true : false;
     res.status(status).json(content);
