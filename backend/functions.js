@@ -8,16 +8,12 @@ export class ApiError extends Error {
   }
 };
 
-export const handleError = (error) => {
-  throw (error instanceof ApiError) ? error : new ApiError(500, error.message);
-}
-
 const sendJsonResponse = (res, status, content = {}) => {
     content.success = (status >= 200 && status < 300) ? true : false;
     res.status(status).json(content);
 };
 
-const handleError = (error, res) => {
+export const handleError = (error, res) => {
   if (error instanceof ApiError) sendJsonResponse(res, error.status, { error: error.message });
   else sendJsonResponse(res, 500, { error: 'Internal Server Error' });
 };

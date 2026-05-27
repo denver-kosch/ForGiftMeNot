@@ -23,7 +23,7 @@ export const login = async (req) => {
 	if (!email || !password) throw new ApiError(400, 'Email and password required');
 	const user = await User.findOne({ where: { email } });
 	
-	if (user && await compare(password, user.password)) {
+	if (user && await compare(password, user.password_hash)) {
 		const token = jwt.sign({ id: user.id }, SECRET);
 		return {status:200, content: {token}, token};
 	} else throw new ApiError(401, 'Invalid email or password');
@@ -45,15 +45,6 @@ export const verifyUser = async (req) => {
 	This is for verifying a user. The method (email, phone number, etc.) is not determined,
 	but this function will flip a "verified" boolean on the user model to true once the user has been verified.
 	*/
-};
-
-export const makeToken = async (email, username) => {
-	try {
-		return jwt.sign({ email, username }, SECRET);
-	}
-	catch (error){
-		throw new ApiError(400, error.message);
-	}
 };
 
 export const extractToken = req => {

@@ -8,7 +8,7 @@ import { fileURLToPath } from 'url';
 import { asyncHandler } from './functions.js';
 import { register, login, auth } from './api/authentication.js';
 import { SERVER_HOST, SERVER_PORT } from './config.js';
-import { createList, addToList, createGift } from './api/create.js';
+import { createList, addToList } from './api/create.js';
 import { getLists, getList, getUser } from './api/read.js';
 import { updateList, updateGift, updateUser, updateProfilePic } from './api/update.js';
 import { deleteList, deleteGift, deleteUser } from './api/delete.js';
@@ -42,8 +42,6 @@ app.post('/auth', asyncHandler(auth));
 app.post('/createList', asyncHandler(createList));
 
 app.post('/addToList', asyncHandler(addToList));
-
-app.post('/createGift', asyncHandler(createGift));
 
 // Read routes
 app.post('/getLists', asyncHandler(getLists));
