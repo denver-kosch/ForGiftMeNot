@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.44, for Win64 (x86_64)
 --
--- Host: localhost    Database: forgiftmenot
+-- Host: localhost    Database: hintdrop
 -- ------------------------------------------------------
 -- Server version	8.0.44
 
@@ -15,6 +15,9 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+DROP DATABASE IF EXISTS `hintdrop`;
+CREATE DATABASE IF NOT EXISTS `hintdrop` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
+USE `hintdrop`;
 --
 -- Table structure for table `gifts`
 --
@@ -86,6 +89,42 @@ INSERT INTO `lists` VALUES (1,1,'Denver Birthday Wishlist','Things Denver wants 
 UNLOCK TABLES;
 
 --
+-- Table structure for table `user_lists`
+--
+
+DROP TABLE IF EXISTS `user_lists`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_lists` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `list_id` int NOT NULL,
+  `role` enum('editor','viewer','owner') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'viewer',
+  `last_opened_at` datetime DEFAULT NULL,
+  `pinned_at` datetime DEFAULT NULL,
+  `archived_at` datetime DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `user_lists_list_id_user_id_unique` (`user_id`,`list_id`),
+  UNIQUE KEY `user_lists_user_id_list_id` (`user_id`,`list_id`),
+  KEY `list_id` (`list_id`),
+  KEY `user_lists_user_id_archived_at_pinned_at_last_opened_at` (`user_id`,`archived_at`,`pinned_at`,`last_opened_at`),
+  CONSTRAINT `user_lists_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `user_lists_ibfk_2` FOREIGN KEY (`list_id`) REFERENCES `lists` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_lists`
+--
+
+LOCK TABLES `user_lists` WRITE;
+/*!40000 ALTER TABLE `user_lists` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_lists` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `userlists`
 --
 
@@ -153,7 +192,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'denver','$2b$10$8I0xW7cqO/2I..SnsxsQLeRBIfD2xrD.UhSmmhSG8tIPYlmM8SFsy','Denver','Smith','denver@example.com','6145551001',1,1,'2026-05-21 10:06:18','2026-05-21 10:06:18'),(2,'alice','$2b$10$8I0xW7cqO/2I..SnsxsQLeRBIfD2xrD.UhSmmhSG8tIPYlmM8SFsy','Alice','Johnson','alice@example.com','6145551002',1,0,'2026-05-21 10:06:18','2026-05-21 10:06:18'),(3,'bob','$2b$10$8I0xW7cqO/2I..SnsxsQLeRBIfD2xrD.UhSmmhSG8tIPYlmM8SFsy','Bob','Williams','bob@example.com','6145551003',1,0,'2026-05-21 10:06:18','2026-05-21 10:06:18'),(4,'carol','$2b$10$8I0xW7cqO/2I..SnsxsQLeRBIfD2xrD.UhSmmhSG8tIPYlmM8SFsy','Carol','Davis','carol@example.com','6145551004',1,0,'2026-05-21 10:06:18','2026-05-21 10:06:18');
+INSERT INTO `users` VALUES (1,'denver','$2b$10$8I0xW7cqO/2I..SnsxsQLeRBIfD2xrD.UhSmmhSG8tIPYlmM8SFsy','Denver','Kosch','dkosch2@gmail.com','+17402437103',1,1,'2026-05-21 10:06:18','2026-05-27 02:29:12'),(2,'alice','$2b$10$8I0xW7cqO/2I..SnsxsQLeRBIfD2xrD.UhSmmhSG8tIPYlmM8SFsy','Alice','Johnson','alice@example.com','6145551002',1,0,'2026-05-21 10:06:18','2026-05-21 10:06:18'),(3,'bob','$2b$10$8I0xW7cqO/2I..SnsxsQLeRBIfD2xrD.UhSmmhSG8tIPYlmM8SFsy','Bob','Williams','bob@example.com','6145551003',1,0,'2026-05-21 10:06:18','2026-05-21 10:06:18'),(4,'carol','$2b$10$8I0xW7cqO/2I..SnsxsQLeRBIfD2xrD.UhSmmhSG8tIPYlmM8SFsy','Carol','Davis','carol@example.com','6145551004',1,0,'2026-05-21 10:06:18','2026-05-21 10:06:18');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -167,8 +206,8 @@ DROP TABLE IF EXISTS `verificationtokens`;
 CREATE TABLE `verificationtokens` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
-  `method` enum('email','sms') COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token_hash` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `method` enum('email','sms') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token_hash` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `expires_at` datetime NOT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -196,4 +235,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-05-25 23:17:33
+-- Dump completed on 2026-05-28 21:56:52

@@ -16,60 +16,66 @@ import { HomeIcon, ListIcon, ProfileIcon } from '@/hooks/icons';
 import { useEffect, useState } from 'react';
 import CreateList from './createList';
 import ListDetail from './listDetail';
+import { COLORS } from '../styles';
 
 
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
 
 const TabNavigator = () => {
-    const colorScheme = useColorScheme();
-    const [token, setToken] = useState(store.getState().auth.token);
+	const colorScheme = useColorScheme();
+	const [token, setToken] = useState(store.getState().auth.token);
 
-    // Subscribe to store updates for token changes
-    useEffect(() => {
-        const unsubscribe = store.subscribe(() => {
-            const newToken = store.getState().auth.token;
-            setToken(newToken);
-        });
+	// Subscribe to store updates for token changes
+	useEffect(() => {
+		const unsubscribe = store.subscribe(() => {
+			const newToken = store.getState().auth.token;
+			setToken(newToken);
+		});
 
-        return () => unsubscribe();
-    }, []);
+		return () => unsubscribe();
+	}, []);
 
-    return (
-        <Tabs.Navigator
-            screenOptions={({ route }) => ({
-                tabBarIcon: ({ color, size }) => {
-                    switch (route.name) {
-                        case 'Home':
-                            return <HomeIcon color={color} size={size} />;
-                        case 'List':
-                            return <ListIcon color={color} size={size} />;
-                        case 'Profile':
-                            return <ProfileIcon color={color} size={size} />;
-                    }
-                },
-                tabBarActiveTintColor: '#b8a96e',
-                tabBarInactiveTintColor: '#a8a8a8',
-                tabBarStyle: {
-                    backgroundColor: colorScheme === 'dark' ? '#333' : '#fff9e2',
-                    borderTopColor: colorScheme === 'dark' ? '#444' : '#ddd',
-                    borderTopWidth: 1,
-                },
-            })}
-        >
-            <Tabs.Screen name="Home" options={{ headerShown: false }} component={Index} />
-            <Tabs.Screen name="List" options={{ headerShown: false }} component={List} />
-            <Tabs.Screen
-                name="Profile"
-                options={{
-                    headerShown: false,
-                    tabBarLabel: token ? 'Profile' : 'Login', // Change label dynamically
-                }}
-                component={token ? ProfilePage : LoginPage} // Change component dynamically
-            />
-        </Tabs.Navigator>
-    );
+	return (
+		<Tabs.Navigator
+			screenOptions={({ route }) => ({
+				tabBarIcon: ({ color, size }) => {
+					switch (route.name) {
+						case 'Home': return <HomeIcon color={color} size={size} />;
+						case 'List': return <ListIcon color={color} size={size} />;
+						case 'Profile': return <ProfileIcon color={color} size={size} />;
+					}
+				},
+				tabBarActiveTintColor: COLORS.glowBlue,
+				tabBarInactiveTintColor: colorScheme === 'dark' ? COLORS.muted : COLORS.dimGray,
+				tabBarStyle: {
+					backgroundColor: colorScheme === 'dark' ? COLORS.void : COLORS.offWhite,
+					borderTopColor: colorScheme === 'dark' ? COLORS.graphite : '#D8D8DF',
+					borderTopWidth: 1,
+				},
+			})}
+		>
+			<Tabs.Screen name="Home" options={{ headerShown: false }} component={Index} />
+			<Tabs.Screen name="List" options={{ headerShown: false }} component={List} />
+			<Tabs.Screen
+				name="Profile"
+				options={{
+					headerShown: false,
+					tabBarLabel: token ? 'Profile' : 'Login', // Change label dynamically
+				}}
+				component={token ? ProfilePage : LoginPage} // Change component dynamically
+			/>
+		</Tabs.Navigator>
+	);
 };
+
+const Screens = [
+	{ name: 'Main', component: TabNavigator, options: { headerShown: false } },
+	{ name: 'List', component: List, options: { headerShown: false } },
+	{ name: 'CreateList', component: CreateList, options: { headerShown: false } },
+	{ name: 'ListDetail', component: ListDetail, options: { headerShown: false } },
+	{ name: '+not-found', component: NotFoundScreen },
+];
 
 
 export default function RootLayout() {
@@ -77,18 +83,16 @@ export default function RootLayout() {
 
 	return (
   	<Provider store={store}>
-  	  <PersistGate loading={<ActivityIndicator/>} persistor={persistor}>
-    	  <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-					<Stack.Navigator>
-						<Stack.Screen name="Main" options={{ headerShown: false }} component={TabNavigator}/>
-                        <Stack.Screen name="List" component={List} options={{ headerShown: false }}/>
-                        <Stack.Screen name="CreateList" component={CreateList} options={{ headerShown: false }}/>
-                        <Stack.Screen name="ListDetail" component={ListDetail} options={{ headerShown: false }}/>
-						<Stack.Screen name="+not-found" component={NotFoundScreen}/>
-					</Stack.Navigator>
-          <StatusBar style="auto" />
-        </ThemeProvider>
-      </PersistGate>
-    </Provider>
+		<PersistGate loading={<ActivityIndicator/>} persistor={persistor}>
+			<ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+				<Stack.Navigator>
+					{Screens.map(({ name, component, options }) => (
+						<Stack.Screen key={name} name={name} component={component} options={options} />
+					))}
+				</Stack.Navigator>
+				<StatusBar style="auto" />
+			</ThemeProvider>
+		</PersistGate>
+	</Provider>
   );
 }

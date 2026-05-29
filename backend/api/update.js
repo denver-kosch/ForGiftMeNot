@@ -23,6 +23,8 @@ export const updateUser = async (req) => {
 		const invalidKeys = keys.filter(key => !ALLOWED_UPDATED_USER_FIELDS.includes(key));
 		if (invalidKeys.length) throw new ApiError(400, `Invalid fields: ${invalidKeys.join(", ")}`);
 
+		console.log("cleaned keys")
+
 		const user = await User.findByPk(id);
 		if (!user) throw new ApiError(404, "User not found");
 
@@ -30,6 +32,7 @@ export const updateUser = async (req) => {
 			const value = req.body[key];
 			if (typeof value !== "string") throw new ApiError(400, `${key} must be a string`);
 			const trimmed = value.trim();
+			console.log(`Processed ${key}: "${value}" -> "${trimmed}"`);
 			if (!trimmed) {
 				if (["username", "email"].includes(key)) throw new ApiError(400, `${key} cannot be empty`);
 				else user[key] = null;

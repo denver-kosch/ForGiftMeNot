@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useProfileStyles } from '@/styles';
 import { useCallback, useState, useEffect } from 'react';
 import apiCall from '@/services/apiCall';
-import PFPModal from '../components/profilePicModal';
+import PFPModal from '../components/editPfpModal';
 import EditProfileModal from '../components/editProfileModal';
 import LoadingIcon from '../assets/images/loadingIcon.png';
 
@@ -42,7 +42,7 @@ const ProfilePage = () => {
         setLoading(true);
         const response = await apiCall(
             'getUser', 
-            {include: ['id', 'firstName', 'lastName', 'admin', 'phoneNum', 'verified', 'username']}, 
+            {include: ['id', 'first_name', 'last_name', 'admin', 'phone_num', 'verified', 'username']}, 
             {"Authorization": `Bearer ${token}`}
         );
         setLoading(false);

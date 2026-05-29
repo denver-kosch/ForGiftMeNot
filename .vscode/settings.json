@@ -5,12 +5,16 @@
                 "authProtocol": "default",
                 "enableSsl": "Disabled"
             },
+            "ssh": "Disabled",
             "previewLimit": 50,
             "server": "localhost",
-            "port": 3307,
+            "port": 3306,
+            "sshOptions": {
+                "port": 22
+            },
             "driver": "MySQL",
-            "name": "ForgiftMeNot",
-            "database": "forgiftmenot",
+            "name": "HintDrop",
+            "database": "hintdrop",
             "username": "root"
         }
     ]

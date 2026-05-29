@@ -1,5 +1,5 @@
 {
-  "name": "forgiftmenot",
+  "name": "hintdrop",
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
@@ -75,7 +75,8 @@
     "typescript": "~5.9.2"
   },
   "expo": {
-    "entryPoint": "./node_modules/expo-router/entry"
+    "entryPoint": "./node_modules/expo-router/entry",
+    "scheme": "hintdrop"
   },
   "private": true
 }
